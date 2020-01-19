@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReniBot.Entities", "ReniBot.Entities\ReniBot.Entities.csproj", "{9F301D8B-B338-4265-96B6-0720F6E52601}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReniBot.Repository", "ReniBot.Repository\ReniBot.Repository.csproj", "{9FBA194E-90F6-4D2C-B6BA-8E06273D2ED4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReniBot.Service", "ReniBot.Service\ReniBot.Service.csproj", "{9C134F1E-4C70-4DCD-9B70-E8B955A60338}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReniBot.AimlEngine", "ReniBot.AimlEngine\ReniBot.AimlEngine.csproj", "{9CCEF2E1-95FD-4CB4-A753-56701DBBB1A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F301D8B-B338-4265-96B6-0720F6E52601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F301D8B-B338-4265-96B6-0720F6E52601}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F301D8B-B338-4265-96B6-0720F6E52601}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F301D8B-B338-4265-96B6-0720F6E52601}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FBA194E-90F6-4D2C-B6BA-8E06273D2ED4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FBA194E-90F6-4D2C-B6BA-8E06273D2ED4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FBA194E-90F6-4D2C-B6BA-8E06273D2ED4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FBA194E-90F6-4D2C-B6BA-8E06273D2ED4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C134F1E-4C70-4DCD-9B70-E8B955A60338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C134F1E-4C70-4DCD-9B70-E8B955A60338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C134F1E-4C70-4DCD-9B70-E8B955A60338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C134F1E-4C70-4DCD-9B70-E8B955A60338}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CCEF2E1-95FD-4CB4-A753-56701DBBB1A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CCEF2E1-95FD-4CB4-A753-56701DBBB1A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CCEF2E1-95FD-4CB4-A753-56701DBBB1A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CCEF2E1-95FD-4CB4-A753-56701DBBB1A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2850151-C0C0-4AF5-B07B-3F66C3101F2F}
+	EndGlobalSection
+EndGlobal

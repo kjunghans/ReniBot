@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReniBot.Entities\ReniBot.Entities.csproj" />
+    <ProjectReference Include="..\ReniBot.Repository\ReniBot.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
