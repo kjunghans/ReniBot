@@ -10,16 +10,21 @@ namespace ReniBot.AimlEngine.Normalize
     /// </summary>
     public class StripIllegalCharacters : ReniBot.AimlEngine.Utils.TextTransformer
     {
-        public StripIllegalCharacters(ReniBot.AimlEngine.Bot bot, string inputString) : base(bot, inputString)
-        { }
+        private Regex _strippers;
+        public StripIllegalCharacters(Regex strippers, string inputString) : base( inputString)
+        {
+            _strippers = strippers;
+        }
 
-        public StripIllegalCharacters(ReniBot.AimlEngine.Bot bot)
-            : base(bot) 
-        { }
+        public StripIllegalCharacters(Regex strippers)
+            : base() 
+        {
+            _strippers = strippers;
+        }
 
         protected override string ProcessChange()
         {
-            return this.bot.Strippers.Replace(this.inputString, " ");
+            return _strippers.Replace(this.inputString, " ");
         }
     }
 }

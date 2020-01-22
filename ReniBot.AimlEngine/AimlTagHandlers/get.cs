@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -22,6 +23,10 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class get : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
+        ILogger _logger;
+        BotConfiguration _config;
+        User _user;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -31,27 +36,28 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public get(ReniBot.AimlEngine.Bot bot,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
+        public get(ILogger logger,
+                    BotConfiguration config,
+                        User user,
                         XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+            : base(logger, templateNode)
         {
+            _logger = logger;
+            _config = config;
+            _user = user;
         }
 
         protected override string ProcessChange()
         {
             if (this.templateNode.Name.ToLower() == "get")
             {
-                if (this.bot.GlobalSettings.Count > 0)
+                if (_config.GlobalSettings.Count > 0)
                 {
                     if (this.templateNode.Attributes.Count == 1)
                     {
                         if (this.templateNode.Attributes[0].Name.ToLower() == "name")
                         {
-                            return this.user.Predicates.grabSetting(this.templateNode.Attributes[0].Value);
+                            return _user.Predicates.grabSetting(this.templateNode.Attributes[0].Value);
                         }
                     }
                 }

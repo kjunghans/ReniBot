@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -27,6 +28,13 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class gender : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
+        private readonly User _user;
+        private readonly Utils.SubQuery _query;
+        private readonly Request _request;
+        private readonly Result _result;
+        private readonly BotConfiguration _config;
+        private readonly ILogger _logger;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -36,14 +44,19 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public gender(ReniBot.AimlEngine.Bot bot,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
+        public gender(ILogger logger,
+                        BotConfiguration config,
+                        User user,
+                        Utils.SubQuery query,
+                        Request request,
+                        Result result,
                         XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+            : base(logger, templateNode)
         {
+            _user = user;
+            _query = query;
+            _config = config;
+            _logger = logger;
         }
 
         protected override string ProcessChange()
@@ -53,13 +66,13 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                 if (this.templateNode.InnerText.Length > 0)
                 {
                     // non atomic version of the node
-                    return ReniBot.AimlEngine.Normalize.ApplySubstitutions.Substitute(this.bot, this.bot.GenderSubstitutions, this.templateNode.InnerText);
+                    return ReniBot.AimlEngine.Normalize.ApplySubstitutions.Substitute( _config.GenderSubstitutions, this.templateNode.InnerText);
                 }
                 else
                 {
                     // atomic version of the node
                     XmlNode starNode = Utils.AIMLTagHandler.getNode("<star/>");
-                    star recursiveStar = new star(this.bot, this.user, this.query, this.request, this.result, starNode);
+                    star recursiveStar = new star(_logger, _user, _query, _request, _result, starNode);
                     this.templateNode.InnerText = recursiveStar.Transform();
                     if (this.templateNode.InnerText.Length > 0)
                     {

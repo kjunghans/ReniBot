@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -15,6 +16,10 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class srai : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
+        Bot _bot;
+        User _user;
+        Request _request;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -24,14 +29,16 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public srai(ReniBot.AimlEngine.Bot bot,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
+        public srai(ILogger logger,
+                        Bot bot,
+                        User user,
+                        Request request,
                         XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+            : base(logger, templateNode)
         {
+            _bot = bot;
+            _user = user;
+            _request = request;
         }
 
         protected override string ProcessChange()
@@ -40,10 +47,10 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
             {
                 if (this.templateNode.InnerText.Length > 0)
                 {
-                    Request subRequest = new Request(this.templateNode.InnerText, this.user.UserId);
-                    subRequest.StartedOn = this.request.StartedOn; // make sure we don't keep adding time to the request
-                    Result subQuery = this.bot.Chat(subRequest);
-                    this.request.hasTimedOut = subRequest.hasTimedOut;
+                    Request subRequest = new Request(this.templateNode.InnerText, _user.UserId);
+                    subRequest.StartedOn = _request.StartedOn; // make sure we don't keep adding time to the request
+                    Result subQuery = _bot.Chat(subRequest);
+                    _request.hasTimedOut = subRequest.hasTimedOut;
                     return subQuery.Output;
                 }
             }

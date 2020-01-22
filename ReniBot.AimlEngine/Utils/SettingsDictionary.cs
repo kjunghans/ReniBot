@@ -12,7 +12,6 @@ namespace ReniBot.AimlEngine.Utils
     /// </summary>
     public class SettingsDictionary
     {
-        #region Attributes
 
         /// <summary>
         /// Holds a dictionary of settings
@@ -25,10 +24,6 @@ namespace ReniBot.AimlEngine.Utils
         /// </summary>
         private List<string> orderedKeys = new List<string>();
 
-        /// <summary>
-        /// The bot this dictionary is associated with
-        /// </summary>
-        protected ReniBot.AimlEngine.Bot bot;
 
         /// <summary>
         /// The number of items in the dictionary
@@ -68,15 +63,13 @@ namespace ReniBot.AimlEngine.Utils
             }
         }
 
-        #endregion
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="bot">The bot for whom this is a settings dictionary</param>
-        public SettingsDictionary(ReniBot.AimlEngine.Bot bot)
+        public SettingsDictionary()
         {
-            this.bot = bot;
         }
 
         #region Methods

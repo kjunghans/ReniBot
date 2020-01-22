@@ -13,16 +13,11 @@ namespace ReniBot.AimlEngine.Utils
     /// </summary>
     abstract public class TextTransformer
     {
-        #region Attributes
         /// <summary>
         /// Instance of the input string
         /// </summary>
         protected string inputString;
 
-        /// <summary>
-        /// The bot that this transformation is connected with
-        /// </summary>
-        public ReniBot.AimlEngine.Bot bot;
 
         /// <summary>
         /// The input string to be transformed in some way
@@ -40,35 +35,23 @@ namespace ReniBot.AimlEngine.Utils
         {
             get{return this.Transform();}
         }
-        #endregion
 
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="bot">The bot this transformer is a part of</param>
         /// <param name="inputString">The input string to be transformed</param>
-        public TextTransformer(ReniBot.AimlEngine.Bot bot, string inputString)
+        public TextTransformer(string inputString)
         {
-            this.bot = bot;
             this.inputString = inputString;
         }
 
-        /// <summary>
-        /// ctor
-        /// </summary>
-        /// <param name="bot">The bot this transformer is a part of</param>
-        public TextTransformer(ReniBot.AimlEngine.Bot bot)
-        {
-            this.bot = bot;
-            this.inputString = string.Empty;
-        }
-
+ 
         /// <summary>
         /// Default ctor for used as part of late binding mechanism
         /// </summary>
         public TextTransformer()
         {
-            this.bot = null;
             this.inputString = string.Empty;
         }
 

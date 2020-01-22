@@ -2,6 +2,7 @@ using System;
 using System.Xml;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -91,8 +92,9 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// AIML predicate, and a required attribute value, which contains a simple pattern expression. The 
     /// element may contain any AIML template elements. 
     /// </summary>
-    public class condition : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class condition : Utils.AIMLTagHandler
     {
+        User _user;
         /// <summary>
         /// Ctor
         /// </summary>
@@ -102,15 +104,13 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public condition(ReniBot.AimlEngine.Bot bot,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
+        public condition(ILogger logger,
+                        User user,
                         XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+            : base(logger, templateNode)
         {
             this.isRecursive = false;
+            _user = user;
         }
 
         protected override string ProcessChange()
@@ -144,7 +144,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
                     if ((name.Length > 0) & (value.Length > 0))
                     {
-                        string actualValue = this.user.Predicates.grabSetting(name);
+                        string actualValue = _user.Predicates.grabSetting(name);
                         Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
                         if (matcher.IsMatch(actualValue))
                         {
@@ -165,7 +165,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                 {
                                     if (childLINode.Attributes[0].Name.ToLower() == "value")
                                     {
-                                        string actualValue = this.user.Predicates.grabSetting(name);
+                                        string actualValue = _user.Predicates.grabSetting(name);
                                         Regex matcher = new Regex(childLINode.Attributes[0].Value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
                                         if (matcher.IsMatch(actualValue))
                                         {
@@ -211,7 +211,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
                                 if ((name.Length > 0) & (value.Length > 0))
                                 {
-                                    string actualValue = this.user.Predicates.grabSetting(name);
+                                    string actualValue = _user.Predicates.grabSetting(name);
                                     Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*","[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
                                     if (matcher.IsMatch(actualValue))
                                     {

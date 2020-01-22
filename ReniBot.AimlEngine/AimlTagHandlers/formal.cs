@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -13,7 +14,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// If no character in this string has a different uppercase version, based on the Unicode 
     /// standard, then the original string is returned.
     /// </summary>
-    public class formal : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class formal : Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -24,13 +25,9 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public formal(ReniBot.AimlEngine.Bot bot,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
-                        XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+        public formal(ILogger logger,
+                         XmlNode templateNode)
+            : base(logger, templateNode)
         {
         }
 

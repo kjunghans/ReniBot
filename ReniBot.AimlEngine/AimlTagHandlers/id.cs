@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -13,6 +14,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class id : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
+        User _user;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -22,21 +25,19 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public id(ReniBot.AimlEngine.Bot bot,
+        public id(ILogger logger,
                         ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
-                        XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+                         XmlNode templateNode)
+            : base(logger, templateNode)
         {
+            _user = user;
         }
 
         protected override string ProcessChange()
         {
             if (this.templateNode.Name.ToLower() == "id")
             {
-                return this.user.UserKey;
+                return _user.UserKey;
             }
             return string.Empty;
         }

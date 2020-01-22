@@ -1,6 +1,8 @@
 using System;
 using System.Xml;
 using System.Text;
+using Microsoft.Extensions.Logging;
+using ReniBot.AimlEngine.Utils;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -17,6 +19,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class bot : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
+        SettingsDictionary _settings;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -26,14 +30,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public bot(ReniBot.AimlEngine.Bot bot,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
-                        XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+        public bot(ILogger logger,
+                    SettingsDictionary globalSettings,
+                         XmlNode templateNode)
+            : base(logger, templateNode)
         {
+            _settings = globalSettings;
         }
 
         protected override string ProcessChange()
@@ -45,7 +47,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                     if (this.templateNode.Attributes[0].Name.ToLower() == "name")
                     {
                         string key = this.templateNode.Attributes["name"].Value;
-                        return (string)this.bot.GlobalSettings.grabSetting(key);
+                        return (string)_settings.grabSetting(key);
                     }
                 }
             }

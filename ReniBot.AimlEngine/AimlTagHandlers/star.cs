@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using System;
 using System.Text;
 using System.Xml;
@@ -21,6 +22,10 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class star : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
+        private readonly ILogger _logger;
+        private readonly Utils.SubQuery _query;
+        private readonly Request _request;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -30,26 +35,29 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public star(ReniBot.AimlEngine.Bot bot,
+        public star(ILogger logger,
                         ReniBot.AimlEngine.User user,
                         ReniBot.AimlEngine.Utils.SubQuery query,
                         ReniBot.AimlEngine.Request request,
                         ReniBot.AimlEngine.Result result,
                         XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+            : base(logger, templateNode)
         {
+            _logger = logger;
+            _query = query;
+            _request = request;
         }
 
         protected override string ProcessChange()
         {
             if (this.templateNode.Name.ToLower() == "star")
             {
-                if (this.query.InputStar.Count > 0)
+                if (_query.InputStar.Count > 0)
                 {
                     if (this.templateNode.Attributes.Count == 0)
                     {
                         // return the first (latest) star in the List<>
-                        return (string)this.query.InputStar[0];
+                        return (string)_query.InputStar[0];
                     }
                     else if (this.templateNode.Attributes.Count == 1)
                     {
@@ -57,27 +65,27 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                         {
                             try
                             {
-                                int index = Convert.ToInt32(this.templateNode.Attributes[0].Value);
+                                int index = Convert.ToInt32(templateNode.Attributes[0].Value);
                                 index--;
-                                if ((index >= 0) & (index < this.query.InputStar.Count))
+                                if ((index >= 0) & (index < _query.InputStar.Count))
                                 {
-                                    return (string)this.query.InputStar[index];
+                                    return (string)_query.InputStar[index];
                                 }
                                 else
                                 {
-                                    this.bot.writeToLog("InputStar out of bounds reference caused by input: " + this.request.rawInput);
+                                    _logger.LogWarning("InputStar out of bounds reference caused by input: " + _request.rawInput);
                                 }
                             }
                             catch
                             {
-                                this.bot.writeToLog("Index set to non-integer value whilst processing star tag in response to the input: " + this.request.rawInput);
+                                _logger.LogWarning("Index set to non-integer value whilst processing star tag in response to the input: " + _request.rawInput);
                             }
                         }
                     }
                 }
                 else
                 {
-                    this.bot.writeToLog("A star tag tried to reference an empty InputStar collection when processing the input: "+this.request.rawInput);
+                    _logger.LogWarning("A star tag tried to reference an empty InputStar collection when processing the input: "+ _request.rawInput);
                 }
             }
             return string.Empty;

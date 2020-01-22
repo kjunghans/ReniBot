@@ -9,12 +9,10 @@ namespace ReniBot.AimlEngine.Normalize
     /// </summary>
     public class MakeCaseInsensitive : ReniBot.AimlEngine.Utils.TextTransformer
     {
-        public MakeCaseInsensitive(ReniBot.AimlEngine.Bot bot, string inputString) : base(bot, inputString)
+        public MakeCaseInsensitive( string inputString) : base(inputString)
         { }
 
-        public MakeCaseInsensitive(ReniBot.AimlEngine.Bot bot) : base(bot) 
-        { }
-
+     
         protected override string ProcessChange()
         {
             return this.inputString.ToUpper();

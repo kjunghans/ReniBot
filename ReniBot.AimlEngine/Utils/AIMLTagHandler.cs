@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using System;
 using System.Text;
 using System.Xml;
@@ -19,17 +20,10 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="request">The request itself</param>
         /// <param name="result">The result to be passed back to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public AIMLTagHandler   (   ReniBot.AimlEngine.Bot bot, 
-                                    ReniBot.AimlEngine.User user, 
-                                    ReniBot.AimlEngine.Utils.SubQuery query,
-                                    ReniBot.AimlEngine.Request request, 
-                                    ReniBot.AimlEngine.Result result, 
-                                    XmlNode templateNode) :base(bot,templateNode.OuterXml)
+        public AIMLTagHandler   (   ILogger logger,
+                                    XmlNode templateNode) :base(templateNode.OuterXml)
         {
-            this.user = user;
-            this.query = query;
-            this.request = request;
-            this.result = result;
+            Logger = logger;
             this.templateNode = templateNode;
             this.templateNode.Attributes.RemoveNamedItem("xmlns");
         }
@@ -41,37 +35,17 @@ namespace ReniBot.AimlEngine.Utils
         {
         }
 
+        public ILogger Logger;
         /// <summary>
         /// A flag to denote if inner tags are to be processed recursively before processing this tag
         /// </summary>
         public bool isRecursive = true;
 
-        /// <summary>
-        /// A representation of the user who made the request
-        /// </summary>
-        public ReniBot.AimlEngine.User user;
-
-        /// <summary>
-        /// The query that produced this node containing the wildcard matches
-        /// </summary>
-        public ReniBot.AimlEngine.Utils.SubQuery query;
-
-        /// <summary>
-        /// A representation of the input into the bot made by the user
-        /// </summary>
-        public ReniBot.AimlEngine.Request request;
-
-        /// <summary>
-        /// A representation of the result to be returned to the user
-        /// </summary>
-        public ReniBot.AimlEngine.Result result;
-
-        /// <summary>
+         /// <summary>
         /// The template node to be processed by the class
         /// </summary>
         public XmlNode templateNode;
 
-        #region Helper methods
 
         /// <summary>
         /// Helper method that turns the passed string into an XML node
@@ -84,6 +58,5 @@ namespace ReniBot.AimlEngine.Utils
             temp.LoadXml(outerXML);
             return temp.FirstChild;
         }
-        #endregion
     }
 }

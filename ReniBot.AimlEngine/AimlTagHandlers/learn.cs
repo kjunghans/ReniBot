@@ -2,6 +2,7 @@ using System;
 using System.Xml;
 using System.Text;
 using System.IO;
+using Microsoft.Extensions.Logging;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -9,8 +10,11 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// The learn element instructs the AIML interpreter to retrieve a resource specified by a URI, 
     /// and to process its AIML object contents.
     /// </summary>
-    public class learn : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class learn : Utils.AIMLTagHandler
     {
+        ILogger _logger;
+        Bot _bot;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -20,14 +24,13 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public learn(ReniBot.AimlEngine.Bot bot,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
+        public learn(ILogger logger,
+                        Bot bot,
                         XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+            : base(logger, templateNode)
         {
+            _logger = logger;
+            _bot = bot;
         }
 
         protected override string ProcessChange()
@@ -46,11 +49,11 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                         try
                         {
                             doc.Load(path);
-                            this.bot.loadAIMLFromXML(doc, path);
+                            _bot.loadAIMLFromXML(doc, path);
                         }
                         catch
                         {
-                            this.bot.writeToLog("ERROR! Attempted (but failed) to <learn> some new AIML from the following URI: " + path);
+                            _logger.LogError("Attempted (but failed) to <learn> some new AIML from the following URI: " + path);
                         }
                     }
                 }

@@ -8,14 +8,17 @@ namespace ReniBot.AimlEngine.Normalize
     /// Checks the text for any matches in the bot's substitutions dictionary and makes
     /// any appropriate changes.
     /// </summary>
-    public class ApplySubstitutions : ReniBot.AimlEngine.Utils.TextTransformer
+    public class ApplySubstitutions : Utils.TextTransformer
     {
-        public ApplySubstitutions(ReniBot.AimlEngine.Bot bot, string inputString)
-            : base(bot, inputString)
-        { }
+        private Utils.SettingsDictionary _substitutions;
+        public ApplySubstitutions(Utils.SettingsDictionary substitutions, string inputString)
+            : base( inputString)
+        {
+            _substitutions = substitutions;
+        }
 
-        public ApplySubstitutions(ReniBot.AimlEngine.Bot bot)
-            : base(bot)
+        public ApplySubstitutions()
+            : base()
         { }
 
         /// <summary>
@@ -37,7 +40,7 @@ namespace ReniBot.AimlEngine.Normalize
 
         protected override string ProcessChange()
         {
-            return ApplySubstitutions.Substitute(this.bot, this.bot.Substitutions, this.inputString);
+            return ApplySubstitutions.Substitute(_substitutions, this.inputString);
         }
 
         /// <summary>
@@ -48,7 +51,7 @@ namespace ReniBot.AimlEngine.Normalize
         /// <param name="dictionary">The dictionary containing the substitutions</param>
         /// <param name="target">the target string to which the substitutions are to be applied</param>
         /// <returns>The processed string</returns>
-        public static string Substitute(ReniBot.AimlEngine.Bot bot, ReniBot.AimlEngine.Utils.SettingsDictionary dictionary, string target)
+        public static string Substitute(Utils.SettingsDictionary dictionary, string target)
         {
             string marker = ApplySubstitutions.getMarker(5);
             string result = target;

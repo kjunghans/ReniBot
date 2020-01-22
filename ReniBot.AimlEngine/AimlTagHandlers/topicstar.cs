@@ -1,6 +1,6 @@
 using System;
 using System.Xml;
-using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -14,8 +14,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// 
     /// The topicstar element does not have any content. 
     /// </summary>
-    public class topicstar : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class topicstar : Utils.AIMLTagHandler
     {
+        Utils.SubQuery _query;
+        Request _request;
+        ILogger _logger;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -25,14 +29,18 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public topicstar(ReniBot.AimlEngine.Bot bot,
+        public topicstar(ILogger logger,
+            ReniBot.AimlEngine.Bot bot,
                         ReniBot.AimlEngine.User user,
                         ReniBot.AimlEngine.Utils.SubQuery query,
                         ReniBot.AimlEngine.Request request,
                         ReniBot.AimlEngine.Result result,
                         XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+            : base(logger, templateNode)
         {
+            _logger = logger;
+            _request = request;
+            _query = query;
         }
 
         protected override string ProcessChange()
@@ -41,13 +49,13 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
             {
                 if (this.templateNode.Attributes.Count == 0)
                 {
-                    if (this.query.TopicStar.Count > 0)
+                    if (_query.TopicStar.Count > 0)
                     {
-                        return (string)this.query.TopicStar[0];
+                        return (string)_query.TopicStar[0];
                     }
                     else
                     {
-                        this.bot.writeToLog("ERROR! An out of bounds index to topicstar was encountered when processing the input: " + this.request.rawInput);
+                        _logger.LogError("An out of bounds index to topicstar was encountered when processing the input: " + _request.rawInput);
                     }
                 }
                 else if (this.templateNode.Attributes.Count == 1)
@@ -59,25 +67,25 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                             try
                             {
                                 int result = Convert.ToInt32(this.templateNode.Attributes[0].Value.Trim());
-                                if (this.query.TopicStar.Count > 0)
+                                if (_query.TopicStar.Count > 0)
                                 {
                                     if (result > 0)
                                     {
-                                        return (string)this.query.TopicStar[result - 1];
+                                        return (string)_query.TopicStar[result - 1];
                                     }
                                     else
                                     {
-                                        this.bot.writeToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                        _logger.LogError("An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.rawInput);
                                     }
                                 }
                                 else
                                 {
-                                    this.bot.writeToLog("ERROR! An out of bounds index to topicstar was encountered when processing the input: " + this.request.rawInput);
+                                    _logger.LogError("An out of bounds index to topicstar was encountered when processing the input: " + _request.rawInput);
                                 }
                             }
                             catch
                             {
-                                this.bot.writeToLog("ERROR! A thatstar tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                _logger.LogError("A thatstar tag with a bady formed index (" + templateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.rawInput);
                             }
                         }
                     }

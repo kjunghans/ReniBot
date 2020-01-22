@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Xml;
 using System.IO;
 using System.Text;
+using Microsoft.Extensions.Logging;
+using ReniBot.AimlEngine.Normalize;
 
 namespace ReniBot.AimlEngine.Utils
 {
@@ -10,44 +12,48 @@ namespace ReniBot.AimlEngine.Utils
     /// A utility class for loading AIML files from disk into the graphmaster structure that 
     /// forms an AIML bot's "brain"
     /// </summary>
-    public class AIMLLoader
+    public class AIMLLoader: IAimlLoader
     {
-        #region Attributes
         /// <summary>
         /// The bot whose brain is being processed
         /// </summary>
-        private ReniBot.AimlEngine.Bot bot;
-        #endregion
+        //private ReniBot.AimlEngine.Bot bot;
+        private readonly ILogger _logger;
+        private readonly Node _graphmaster;
+        private int _graphSize = 0;
+        private readonly bool _trustAiml;
+        private readonly int _maxThatSize;
+        private readonly ApplySubstitutions _substitutor;
+        private readonly StripIllegalCharacters _stripper;
+
+        public Node GraphMaster { get { return _graphmaster; } }
+
+        public int GraphSize { get { return _graphSize; } }
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="bot">The bot whose brain is being processed</param>
-        public AIMLLoader(ReniBot.AimlEngine.Bot bot)
+        public AIMLLoader(ILogger logger, ApplySubstitutions substitutor, StripIllegalCharacters stripper, bool trustAiml, int maxThatSize)
         {
-            this.bot = bot;
+            _logger = logger;
+            _graphmaster = new Node();
+            _maxThatSize = maxThatSize;
+            _substitutor = substitutor;
+            _stripper = stripper;
         }
 
-        #region Methods
-
-        /// <summary>
-        /// Loads the AIML from files found in the bot's AIMLpath into the bot's brain
-        /// </summary>
-        public void loadAIML()
-        {
-            this.loadAIML(this.bot.PathToAIML);
-        }
-
+ 
         /// <summary>
         /// Loads the AIML from files found in the path
         /// </summary>
         /// <param name="path"></param>
-        public void loadAIML(string path)
+        public Node LoadAIML(string path)
         {
             if (Directory.Exists(path))
             {
                 // process the AIML
-                this.bot.writeToLog("Starting to process AIML files found in the directory " + path);
+                _logger.LogInformation("Starting to process AIML files found in the directory {0}" , path);
 
                 string[] fileEntries = Directory.GetFiles(path, "*.aiml");
                 if (fileEntries.Length > 0)
@@ -56,17 +62,18 @@ namespace ReniBot.AimlEngine.Utils
                     {
                         this.loadAIMLFile(filename);
                     }
-                    this.bot.writeToLog("Finished processing the AIML files. " + Convert.ToString(this.bot.Size) + " categories processed.");
+                    _logger.LogInformation("Finished processing the AIML files. ");
                 }
                 else
                 {
-                    throw new FileNotFoundException("Could not find any .aiml files in the specified directory (" + path + "). Please make sure that your aiml file end in a lowercase aiml extension, for example - myFile.aiml is valid but myFile.AIML is not.");
+                    throw new FileNotFoundException("Could not find any .aiml files in the specified directory ( {0}). Please make sure that your aiml file end in a lowercase aiml extension, for example - myFile.aiml is valid but myFile.AIML is not.", path);
                 }
             }
             else
             {
                 throw new FileNotFoundException("The directory specified as the path to the AIML files (" + path + ") cannot be found by the AIMLLoader object. Please make sure the directory where you think the AIML files are to be found is the same as the directory specified in the settings file.");
             }
+            return _graphmaster;
         }
 
         /// <summary>
@@ -74,14 +81,15 @@ namespace ReniBot.AimlEngine.Utils
         /// graphmaster
         /// </summary>
         /// <param name="filename">The name of the file to process</param>
-        public void loadAIMLFile(string filename)
+        public Node loadAIMLFile(string filename)
         {
-            this.bot.writeToLog("Processing AIML file: " + filename);
+            _logger.LogInformation("Processing AIML file: {0}", filename);
             
             // load the document
             XmlDocument doc = new XmlDocument();
             doc.Load(filename);
-            this.loadAIMLFromXML(doc, filename);
+            loadAIMLFromXML(doc, filename);
+            return _graphmaster;
         }
 
         /// <summary>
@@ -89,7 +97,7 @@ namespace ReniBot.AimlEngine.Utils
         /// </summary>
         /// <param name="doc">The XML document containing the AIML</param>
         /// <param name="filename">Where the XML document originated</param>
-        public void loadAIMLFromXML(XmlDocument doc, string filename)
+        public Node loadAIMLFromXML(XmlDocument doc, string filename)
         {
             // Get a list of the nodes that are children of the <aiml> tag
             // these nodes should only be either <topic> or <category>
@@ -101,13 +109,14 @@ namespace ReniBot.AimlEngine.Utils
             {
                 if (currentNode.Name == "topic")
                 {
-                    this.processTopic(currentNode, filename);
+                    processTopic(currentNode, filename);
                 }
                 else if (currentNode.Name == "category")
                 {
-                    this.processCategory(currentNode, filename);
+                    processCategory(currentNode, filename);
                 }
             }
+            return _graphmaster;
         }
 
         /// <summary>
@@ -142,7 +151,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="filename">the file from which this category was taken</param>
         private void processCategory(XmlNode node, string filename)
         {
-            this.processCategory(node, "*", filename);
+            processCategory(node, "*", filename);
         }
 
         /// <summary>
@@ -166,25 +175,25 @@ namespace ReniBot.AimlEngine.Utils
                 throw new XmlException("Missing template tag in the node with pattern: " + pattern.InnerText + " found in " + filename);
             }
 
-            string categoryPath = this.generatePath(node, topicName, false);
+            string categoryPath = this.GeneratePath(node, topicName, false);
 
             // o.k., add the processed AIML to the GraphMaster structure
             if (categoryPath.Length > 0)
             {
                 try
                 {
-                    this.bot.Graphmaster.addCategory(categoryPath, template.OuterXml, filename);
+                    _graphmaster.addCategory(categoryPath, template.OuterXml, filename);
                     // keep count of the number of categories that have been processed
-                    this.bot.Size++;
+                    _graphSize++;
                 }
                 catch
                 {
-                    this.bot.writeToLog("ERROR! Failed to load a new category into the graphmaster where the path = " + categoryPath + " and template = " + template.OuterXml + " produced by a category in the file: " + filename);
+                    _logger.LogError("Failed to load a new category into the graphmaster where the path = " + categoryPath + " and template = " + template.OuterXml + " produced by a category in the file: " + filename);
                 }
             }
             else
             {
-                this.bot.writeToLog("WARNING! Attempted to load a new category with an empty pattern where the path = " + categoryPath + " and template = " + template.OuterXml + " produced by a category in the file: " + filename);
+                _logger.LogWarning("Attempted to load a new category with an empty pattern where the path = " + categoryPath + " and template = " + template.OuterXml + " produced by a category in the file: " + filename);
             }
         }
 
@@ -196,7 +205,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="isUserInput">marks the path to be created as originating from user input - so
         /// normalize out the * and _ wildcards used by AIML</param>
         /// <returns>The appropriately processed path</returns>
-        public string generatePath(XmlNode node, string topicName, bool isUserInput)
+        private string GeneratePath(XmlNode node, string topicName, bool isUserInput)
         {
             // get the nodes that we need
             XmlNode pattern = this.FindNode("pattern", node);
@@ -217,7 +226,7 @@ namespace ReniBot.AimlEngine.Utils
                 thatText = that.InnerText;
             }
 
-            return this.generatePath(patternText, thatText, topicName, isUserInput);
+            return this.GeneratePath(patternText, thatText, topicName, isUserInput);
         }
 
         /// <summary>
@@ -247,7 +256,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="isUserInput">marks the path to be created as originating from user input - so
         /// normalize out the * and _ wildcards used by AIML</param>
         /// <returns>The appropriately processed path</returns>
-        public string generatePath(string pattern, string that, string topicName, bool isUserInput)
+        public string GeneratePath(string pattern, string that, string topicName, bool isUserInput)
         {
             // to hold the normalized path to be entered into the graphmaster
             StringBuilder normalizedPath = new StringBuilder();
@@ -255,7 +264,7 @@ namespace ReniBot.AimlEngine.Utils
             string normalizedThat = "*";
             string normalizedTopic = "*";
 
-            if ((this.bot.TrustAIML)&(!isUserInput))
+            if ((_trustAiml)&(!isUserInput))
             {
                 normalizedPattern = pattern.Trim();
                 normalizedThat = that.Trim();
@@ -282,7 +291,7 @@ namespace ReniBot.AimlEngine.Utils
 
                 // This check is in place to avoid huge "that" elements having to be processed by the 
                 // graphmaster. 
-                if (normalizedThat.Length > this.bot.MaxThatSize)
+                if (normalizedThat.Length > _maxThatSize)
                 {
                     normalizedThat = "*";
                 }
@@ -309,15 +318,11 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="isUserInput">True if the string being normalized is part of the user input path - 
         /// flags that we need to normalize out * and _ chars</param>
         /// <returns>The normalized string</returns>
-        public string Normalize(string input, bool isUserInput)
+        private string Normalize(string input, bool isUserInput)
         {
             StringBuilder result = new StringBuilder();
 
-            // objects for normalization of the input
-            Normalize.ApplySubstitutions substitutor = new ReniBot.AimlEngine.Normalize.ApplySubstitutions(this.bot);
-            Normalize.StripIllegalCharacters stripper = new ReniBot.AimlEngine.Normalize.StripIllegalCharacters(this.bot);
-
-            string substitutedInput = substitutor.Transform(input);
+             string substitutedInput = _substitutor.Transform(input);
             // split the pattern into it's component words
             string[] substitutedWords = substitutedInput.Split(" \r\n\t".ToCharArray());
 
@@ -327,7 +332,7 @@ namespace ReniBot.AimlEngine.Utils
                 string normalizedWord;
                 if (isUserInput)
                 {
-                    normalizedWord = stripper.Transform(word);
+                    normalizedWord = _stripper.Transform(word);
                 }
                 else
                 {
@@ -337,7 +342,7 @@ namespace ReniBot.AimlEngine.Utils
                     }
                     else
                     {
-                        normalizedWord = stripper.Transform(word);
+                        normalizedWord = _stripper.Transform(word);
                     }
                 }
                 result.Append(normalizedWord.Trim() + " ");
@@ -345,6 +350,5 @@ namespace ReniBot.AimlEngine.Utils
 
             return result.ToString().Replace("  "," "); // make sure the whitespace is neat
         }
-        #endregion
     }
 }

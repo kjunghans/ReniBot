@@ -1,6 +1,6 @@
+using Microsoft.Extensions.Logging;
 using System;
 using System.Xml;
-using System.Text;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -10,8 +10,10 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// 
     /// The size element does not have any content. 
     /// </summary>
-    public class size : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class size : Utils.AIMLTagHandler
     {
+        private readonly int _botSize;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -21,21 +23,19 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public size(ReniBot.AimlEngine.Bot bot,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
+        public size(ILogger logger,
+                    int botSize,
                         XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+            : base(logger, templateNode)
         {
+            _botSize = botSize;
         }
 
         protected override string ProcessChange()
         {
             if (this.templateNode.Name.ToLower() == "size")
             {
-                return Convert.ToString(this.bot.Size);
+                return Convert.ToString(_botSize);
             }
             return string.Empty;
         }

@@ -1,6 +1,5 @@
-using System;
+using Microsoft.Extensions.Logging;
 using System.Xml;
-using System.Text;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -11,8 +10,15 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// 
     /// The atomic sr does not have any content. 
     /// </summary>
-    public class sr : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class sr : Utils.AIMLTagHandler
     {
+        ILogger _logger;
+        User _user;
+        Utils.SubQuery _query;
+        Request _request;
+        Result _result;
+        Bot _bot;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -22,14 +28,22 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public sr(ReniBot.AimlEngine.Bot bot,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
+        public sr(ILogger logger,
+                        Bot bot,
+                        User user,
+                        Utils.SubQuery query,
+                        Request request,
+                        Result result,
                         XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+            : base(logger, templateNode)
         {
+            _user = user;
+            _query = query;
+            _request = request;
+            _result = result;
+            _logger = logger;
+            _bot = bot;
+
         }
 
         protected override string ProcessChange()
@@ -37,11 +51,11 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
             if (this.templateNode.Name.ToLower() == "sr")
             {
                 XmlNode starNode = Utils.AIMLTagHandler.getNode("<star/>");
-                star recursiveStar = new star(this.bot, this.user, this.query, this.request, this.result, starNode);
+                star recursiveStar = new star(_logger, _user, _query, _request, _result, starNode);
                 string starContent = recursiveStar.Transform();
 
                 XmlNode sraiNode = ReniBot.AimlEngine.Utils.AIMLTagHandler.getNode("<srai>"+starContent+"</srai>");
-                srai sraiHandler = new srai(this.bot, this.user, this.query, this.request, this.result, sraiNode);
+                srai sraiHandler = new srai(_logger, _bot,  _user, _request, sraiNode);
                 return sraiHandler.Transform();
             }
             return string.Empty;

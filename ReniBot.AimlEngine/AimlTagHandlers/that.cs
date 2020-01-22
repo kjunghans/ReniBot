@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using System;
 using System.Text;
 using System.Xml;
@@ -24,6 +25,10 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class that : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
+        ILogger _logger;
+        User _user;
+        Request _request;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -33,14 +38,15 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public that(ReniBot.AimlEngine.Bot bot,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
+        public that(ILogger logger,
+                        User user,
+                        Request request,
                         XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+            : base(logger, templateNode)
         {
+            _logger = logger;
+            _user = user;
+            _request = request;
         }
 
         protected override string ProcessChange()
@@ -49,7 +55,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
             {
                 if (this.templateNode.Attributes.Count == 0)
                 {
-                    return this.user.getThat();
+                    return _user.getThat();
                 }
                 else if (this.templateNode.Attributes.Count == 1)
                 {
@@ -67,11 +73,11 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                     int sentence = Convert.ToInt32(dimensions[1].Trim());
                                     if ((result > 0) & (sentence > 0))
                                     {
-                                        return this.user.getThat(result - 1, sentence - 1);
+                                        return _user.getThat(result - 1, sentence - 1);
                                     }
                                     else
                                     {
-                                        this.bot.writeToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                        _logger.LogError("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.rawInput);
                                     }
                                 }
                                 else
@@ -79,17 +85,17 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                     int result = Convert.ToInt32(this.templateNode.Attributes[0].Value.Trim());
                                     if (result > 0)
                                     {
-                                        return this.user.getThat(result - 1);
+                                        return _user.getThat(result - 1);
                                     }
                                     else
                                     {
-                                        this.bot.writeToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                        _logger.LogError("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.rawInput);
                                     }
                                 }
                             }
                             catch
                             {
-                                this.bot.writeToLog("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + this.request.rawInput);
+                                _logger.LogError("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.rawInput);
                             }
                         }
                     }

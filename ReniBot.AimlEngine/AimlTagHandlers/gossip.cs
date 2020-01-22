@@ -1,6 +1,5 @@
-using System;
+using Microsoft.Extensions.Logging;
 using System.Xml;
-using System.Text;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -12,8 +11,11 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// 
     /// The gossip element does not have any attributes. It may contain any AIML template elements.
     /// </summary>
-    public class gossip : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class gossip : Utils.AIMLTagHandler
     {
+        ILogger _logger;
+        User _user;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -23,14 +25,13 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public gossip(ReniBot.AimlEngine.Bot bot,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
-                        XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+        public gossip(ILogger logger,
+                        User user,
+                         XmlNode templateNode)
+            : base(logger, templateNode)
         {
+            _logger = logger;
+            _user = user;
         }
 
         protected override string ProcessChange()
@@ -40,7 +41,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                 // gossip is merely logged by the bot and written to log files
                 if (this.templateNode.InnerText.Length > 0)
                 {
-                    this.bot.writeToLog("GOSSIP from user: "+this.user.UserKey+", '"+this.templateNode.InnerText+"'");
+                    _logger.LogInformation("GOSSIP from user: "+ _user.UserKey+", '"+this.templateNode.InnerText+"'");
                 }
             }
             return string.Empty;

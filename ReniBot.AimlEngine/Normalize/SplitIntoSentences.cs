@@ -13,7 +13,7 @@ namespace ReniBot.AimlEngine.Normalize
         /// <summary>
         /// The bot this sentence splitter is associated with
         /// </summary>
-        private ReniBot.AimlEngine.Bot bot;
+        private BotConfiguration _config;
 
         /// <summary>
         /// The raw input string
@@ -25,19 +25,19 @@ namespace ReniBot.AimlEngine.Normalize
         /// </summary>
         /// <param name="bot">The bot this sentence splitter is associated with</param>
         /// <param name="inputString">The raw input string to be processed</param>
-        public SplitIntoSentences(ReniBot.AimlEngine.Bot bot, string inputString)
+        public SplitIntoSentences(BotConfiguration config, string inputString)
         {
-            this.bot = bot;
-            this.inputString = inputString;
+            _config = config;
+            inputString = inputString;
         }
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="bot">The bot this sentence splitter is associated with</param>
-        public SplitIntoSentences(ReniBot.AimlEngine.Bot bot)
+        public SplitIntoSentences(BotConfiguration config)
         {
-            this.bot = bot;
+            _config = config;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace ReniBot.AimlEngine.Normalize
         /// <returns>An array of strings representing the constituent "sentences"</returns>
         public string[] Transform()
         {
-            string[] tokens = (string[])this.bot.Splitters.ToArray();
+            string[] tokens = (string[])_config.Splitters.ToArray();
             string[] rawResult = this.inputString.Split(tokens, System.StringSplitOptions.RemoveEmptyEntries);
             List<string> tidyResult = new List<string>();
             foreach (string rawSentence in rawResult)

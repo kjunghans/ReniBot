@@ -2,6 +2,7 @@ using System;
 using System.Xml;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -15,8 +16,15 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// If no character in this string has a different uppercase version, based on the Unicode 
     /// standard, then the original string is returned. 
     /// </summary>
-    public class sentence : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class sentence : Utils.AIMLTagHandler
     {
+        BotConfiguration _config;
+        ILogger _logger;
+        User _user;
+        Utils.SubQuery _query;
+        Request _request;
+        Result _result;
+
         /// <summary>
         /// Ctor
         /// </summary>
@@ -26,14 +34,22 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public sentence(ReniBot.AimlEngine.Bot bot,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
+        public sentence(ILogger logger,
+                         BotConfiguration config,
+                        User user,
+                        Utils.SubQuery query,
+                        Request request,
+                        Result result,
                         XmlNode templateNode)
-            : base(bot, user, query, request, result, templateNode)
+            : base(logger, templateNode)
         {
+            _config = config;
+            _user = user;
+            _query = query;
+            _request = request;
+            _result = result;
+            _logger = logger;
+
         }
 
         protected override string ProcessChange()
@@ -48,7 +64,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                     for (int i = 0; i < letters.Length; i++)
                     {
                         string letterAsString = Convert.ToString(letters[i]);
-                        if (this.bot.Splitters.Contains(letterAsString))
+                        if (_config.Splitters.Contains(letterAsString))
                         {
                             doChange = true;
                         }
@@ -59,12 +75,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                         {
                             if (doChange)
                             {
-                                result.Append(letterAsString.ToUpper(this.bot.Locale));
+                                result.Append(letterAsString.ToUpper(_config.Locale));
                                 doChange = false;
                             }
                             else
                             {
-                                result.Append(letterAsString.ToLower(this.bot.Locale));
+                                result.Append(letterAsString.ToLower(_config.Locale));
                             }
                         }
                         else
@@ -78,7 +94,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                 {
                     // atomic version of the node
                     XmlNode starNode = Utils.AIMLTagHandler.getNode("<star/>");
-                    star recursiveStar = new star(this.bot, this.user, this.query, this.request, this.result, starNode);
+                    star recursiveStar = new star(_logger, _user, _query, _request, _result, starNode);
                     this.templateNode.InnerText = recursiveStar.Transform();
                     if (this.templateNode.InnerText.Length > 0)
                     {
