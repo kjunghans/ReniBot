@@ -1,4 +1,4 @@
-using ReniBot.Service;
+using ReniBot.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;

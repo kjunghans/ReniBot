@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ReniBot.Common;
 using ReniBot.Entities;
 using ReniBot.Repository;
 
 namespace ReniBot.Service
 {
-    public class UserPredicateService
+    public class UserPredicateService : IUserPredicateService
     {
         private readonly int _userId;
 

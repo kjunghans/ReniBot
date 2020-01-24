@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ReniBot.Service;
+﻿using ReniBot.Common;
 
 namespace ReniBot.AimlEngine.Utils
 {
     public class RequestFactory
     {
-        public static Request Create(string input, int userId)
+        private readonly IUserRequestService _userRequestService;
+        public RequestFactory(IUserRequestService userRequestService)
         {
-            int requestId = UserRequestService.Add(input, userId);
+            _userRequestService = userRequestService;
+        }
+        public  Request Create(string input, int userId)
+        {
+            int requestId = _userRequestService.Add(input, userId);
             Request request = new Request(input, userId);
             request.id = requestId;
 

@@ -5,9 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ReniBot.Common\ReniBot.Common.csproj" />
     <ProjectReference Include="..\ReniBot.Entities\ReniBot.Entities.csproj" />
-    <ProjectReference Include="..\ReniBot.Repository\ReniBot.Repository.csproj" />
   </ItemGroup>
 
 </Project>

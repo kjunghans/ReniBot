@@ -1,16 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using System.IO;
 using System.Xml;
 using System.Text;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Reflection;
 using System.Net.Mail;
-
 using ReniBot.AimlEngine.Utils;
-using ReniBot.Service;
+using ReniBot.Common;
 using ReniBot.Entities;
 using Microsoft.Extensions.Logging;
 
@@ -22,60 +16,38 @@ namespace ReniBot.AimlEngine
     /// </summary>
     public class Bot
     {
-        private string _appKey;
+        public string AppKey { get; set; }
         private BotConfiguration _config;
         private int _appId;
         private ILogger _logger;
-        private IAimlLoader _loader;
         /// <summary>
         /// The "brain" of the bot
         /// </summary>
         private Node _graphmaster;
         private AimlTagHandlerFactory _tagFactory;
-
+        private IBotUserService _botUserService;
+        private IUserResultService _userResultService;
+        private readonly IAimlLoader _loader;
+        private readonly IUserPredicateService _predicateService;
+        private readonly IUserRequestService _requestService;
 
         /// <summary>
         /// Ctor
         /// </summary>
-        public Bot(string appKey, BotConfiguration configuration, ILogger logger, IAimlLoader loader)
+        public Bot(BotConfiguration configuration, ILogger logger, Node brain, IBotUserService botUserService, 
+            IUserResultService resultService, IAimlLoader loader, IUserPredicateService predicateService, IUserRequestService requestService)
         {
-            _appKey = appKey;
             _config = configuration;
             _logger = logger;
-            _loader = loader;
+            _graphmaster = brain;
             _tagFactory = new AimlTagHandlerFactory(logger, configuration);
+            _botUserService = botUserService;
+            _userResultService = resultService;
+            _loader = loader;
+            _predicateService = predicateService;
+            _requestService = requestService;
         }
 
-
-        public void initialize()
-        {
-            _appId = ApplicationService.GetApplicationIdFromKey(_appKey);
-            if (_appId < 1)
-                throw new Exception("Could not find application with that appKey");
-            List<AimlDoc> docList = ApplicationService.GetAimlDocs(_appId);
-            foreach (var aimlDoc in docList)
-                loadAIMLFromXML(aimlDoc.XmlDoc, aimlDoc.name);
-
-        }
-
-        /// <summary>
-        /// Loads AIML from .aiml files into the graphmaster "brain" of the bot
-        /// </summary>
-        public void loadAIMLFromFiles()
-        {
-           _graphmaster = _loader.LoadAIML(_config.PathToAIML);
-        }
-
-        /// <summary>
-        /// Allows the bot to load a new XML version of some AIML
-        /// </summary>
-        /// <param name="newAIML">The XML document containing the AIML</param>
-        /// <param name="filename">The originator of the XML document</param>
-        public void loadAIMLFromXML(XmlDocument newAIML, string filename)
-        {
-            _graphmaster =  _loader.loadAIMLFromXML(newAIML, filename);
-
-        }
 
         /// <summary>
         /// Given some raw input and a unique ID creates a response for a new user
@@ -85,7 +57,7 @@ namespace ReniBot.AimlEngine
         /// <returns>the result to be output to the user</returns>
         public Result Chat(string rawInput, string UserGUID)
         {
-            int userId = BotUserService.GetUserId(_appId, UserGUID);
+            int userId = _botUserService.GetUserId(_appId, UserGUID);
             Request request = new Request(rawInput, userId);
             return this.Chat(request);
         }
@@ -107,9 +79,8 @@ namespace ReniBot.AimlEngine
                 foreach (string sentence in rawSentences)
                 {
                     result.InputSentences.Add(sentence);
-                    string topic = BotUserService.GetTopic(request.userId);
-                    UserResultService service = new UserResultService(request.userId);
-                    string lastOutput = service.GetLastOutput();
+                    string topic = _botUserService.GetTopic(request.userId);
+                    string lastOutput = _userResultService.GetLastOutput(request.userId);
                     string path = _loader.GeneratePath(sentence, lastOutput, topic, true);
                     result.NormalizedPaths.Add(path);
                 }
@@ -131,7 +102,7 @@ namespace ReniBot.AimlEngine
                         try
                         {
                             XmlNode templateNode = AIMLTagHandler.getNode(query.Template);
-                            string outputSentence = this.processNode(templateNode, query, request, result, new User(request.userId));
+                            string outputSentence = this.processNode(templateNode, query, request, result, new User(_botUserService, _predicateService, _userResultService, _requestService) { UserId = request.userId });
                             if (outputSentence.Length > 0)
                             {
                                 result.OutputSentences.Add(outputSentence);
@@ -155,10 +126,14 @@ namespace ReniBot.AimlEngine
 
             // populate the Result object
             result.Duration = DateTime.Now - request.StartedOn;
-            UserResultService rservice = new UserResultService(request.userId);
-            rservice.Add(result.Duration.Milliseconds, result.HasTimedOut, result.RawOutput, result.requestId, result.UserId);
+            _userResultService.Add(result.Duration.Milliseconds, result.HasTimedOut, result.RawOutput, result.requestId, result.UserId);
 
             return result;
+        }
+
+        public void Learn(XmlDocument doc, string filename)
+        {
+            _loader.loadAIMLFromXML(doc, filename);
         }
 
         /// <summary>

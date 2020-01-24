@@ -49,7 +49,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                         try
                         {
                             doc.Load(path);
-                            _bot.loadAIMLFromXML(doc, path);
+                            _bot.Learn(doc, path);
                         }
                         catch
                         {

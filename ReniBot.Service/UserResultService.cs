@@ -1,48 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ReniBot.Common;
 using ReniBot.Entities;
 using ReniBot.Repository;
 
 namespace ReniBot.Service
 {
-    public class UserResultService
+    public class UserResultService : IUserResultService
     {
-        private readonly int _userId;
-
-        public UserResultService(int userId)
-        {
-            _userId = userId;
-        }
-
-        public int Count()
+ 
+        public int Count(int userId)
         {
             UnitOfWork uow = new UnitOfWork();
-            return uow.BotUserResultRepository.GetItem(r => r.userId == _userId).Count();
+            return uow.BotUserResultRepository.GetItem(r => r.userId == userId).Count();
         }
 
-        public BotUserResult GetLast()
+        public BotUserResult GetLast(int userId)
         {
             UnitOfWork uow = new UnitOfWork();
-            return uow.BotUserResultRepository.GetLast(r => r.userId == _userId, r => r.timeStamp);
+            return uow.BotUserResultRepository.GetLast(r => r.userId == userId, r => r.timeStamp);
         }
 
-        public string GetLastOutput()
+        public string GetLastOutput(int userId)
         {
             UnitOfWork uow = new UnitOfWork();
-            BotUserResult result = uow.BotUserResultRepository.GetLast(r => r.userId == _userId, r => r.timeStamp);
+            BotUserResult result = uow.BotUserResultRepository.GetLast(r => r.userId == userId, r => r.timeStamp);
             string output = "*";
             if (result != null)
                 output = result.rawOutput;
             return output;
         }
 
-        public BotUserResult GetNResult(int index)
+        public BotUserResult GetNResult(int index, int userId)
         {
             UnitOfWork uow = new UnitOfWork();
-            return uow.BotUserResultRepository.GetN(index,  r => r.userId == _userId, r => r.timeStamp);
+            return uow.BotUserResultRepository.GetN(index, r => r.userId == userId, r => r.timeStamp);
         }
 
         public void Add(int duration, bool hasTimedOut, string rawOutput, int requestId, int userId)
