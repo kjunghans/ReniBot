@@ -30,22 +30,36 @@ namespace ReniBot.AimlEngine
         private readonly IAimlLoader _loader;
         private readonly IUserPredicateService _predicateService;
         private readonly IUserRequestService _requestService;
+        private readonly IApplicationService _applicationService;
+        private readonly IBotConfigurationLoader _configurationLoader;
 
         /// <summary>
         /// Ctor
         /// </summary>
-        public Bot(BotConfiguration configuration, ILogger logger, Node brain, IBotUserService botUserService, 
-            IUserResultService resultService, IAimlLoader loader, IUserPredicateService predicateService, IUserRequestService requestService)
+        public Bot(IBotConfigurationLoader configurationLoader, ILogger logger, IBotUserService botUserService, 
+            IUserResultService resultService, IAimlLoader loader, IUserPredicateService predicateService, 
+            IUserRequestService requestService, IApplicationService applicationService)
         {
-            _config = configuration;
             _logger = logger;
-            _graphmaster = brain;
-            _tagFactory = new AimlTagHandlerFactory(logger, configuration);
             _botUserService = botUserService;
             _userResultService = resultService;
             _loader = loader;
             _predicateService = predicateService;
             _requestService = requestService;
+            _applicationService = applicationService;
+        }
+
+        public void Initialize()
+        {
+            _appId = _applicationService.GetApplicationIdFromKey(AppKey);
+            if (_appId < 1)
+                throw new Exception("Could not find application with that appKey");
+            _config = _configurationLoader.loadSettings();
+            _tagFactory = new AimlTagHandlerFactory(_logger, _config);
+            List<AimlDoc> docList = _applicationService.GetAimlDocs(_appId);
+            foreach (var aimlDoc in docList)
+                Learn(aimlDoc.XmlDoc, aimlDoc.name);
+
         }
 
 
@@ -59,7 +73,7 @@ namespace ReniBot.AimlEngine
         {
             int userId = _botUserService.GetUserId(_appId, UserGUID);
             Request request = new Request(rawInput, userId);
-            return this.Chat(request);
+            return Chat(request);
         }
 
         /// <summary>
@@ -102,7 +116,7 @@ namespace ReniBot.AimlEngine
                         try
                         {
                             XmlNode templateNode = AIMLTagHandler.getNode(query.Template);
-                            string outputSentence = this.processNode(templateNode, query, request, result, new User(_botUserService, _predicateService, _userResultService, _requestService) { UserId = request.userId });
+                            string outputSentence = processNode(templateNode, query, request, result, new User(_botUserService, _predicateService, _userResultService, _requestService) { UserId = request.userId });
                             if (outputSentence.Length > 0)
                             {
                                 result.OutputSentences.Add(outputSentence);
@@ -133,6 +147,7 @@ namespace ReniBot.AimlEngine
 
         public void Learn(XmlDocument doc, string filename)
         {
+            _loader.SetGraphMaster(_graphmaster);
             _loader.loadAIMLFromXML(doc, filename);
         }
 
@@ -165,7 +180,7 @@ namespace ReniBot.AimlEngine
                     // recursively check
                     foreach (XmlNode childNode in node.ChildNodes)
                     {
-                        templateResult.Append(this.processNode(childNode, query, request, result, user));
+                        templateResult.Append(processNode(childNode, query, request, result, user));
                     }
                 }
                 return templateResult.ToString();
@@ -188,7 +203,7 @@ namespace ReniBot.AimlEngine
                             {
                                 if (childNode.NodeType != XmlNodeType.Text)
                                 {
-                                    childNode.InnerXml = this.processNode(childNode, query, request, result, user);
+                                    childNode.InnerXml = processNode(childNode, query, request, result, user);
                                 }
                             }
                         }
@@ -204,7 +219,7 @@ namespace ReniBot.AimlEngine
                             // recursively check
                             foreach (XmlNode childNode in resultNode.ChildNodes)
                             {
-                                recursiveResult.Append(this.processNode(childNode, query, request, result, user));
+                                recursiveResult.Append(processNode(childNode, query, request, result, user));
                             }
                             return recursiveResult.ToString();
                         }

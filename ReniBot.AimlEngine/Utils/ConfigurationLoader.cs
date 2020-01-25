@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Xml;
 
 namespace ReniBot.AimlEngine.Utils
 {
-    public class ConfigurationLoader
+    public class ConfigurationLoader: IBotConfigurationLoader
     {
 
         BotConfiguration _config = new BotConfiguration();
@@ -14,11 +12,12 @@ namespace ReniBot.AimlEngine.Utils
         /// <summary>
         /// Loads settings based upon the default location of the Settings.xml file
         /// </summary>
-        public void loadSettings()
+        public BotConfiguration loadSettings()
         {
             // try a safe default setting for the settings xml file
             string path = Path.Combine(Environment.CurrentDirectory, Path.Combine("config", "Settings.xml"));
             loadSettings(path);
+            return _config;
         }
 
         /// <summary>
@@ -26,7 +25,7 @@ namespace ReniBot.AimlEngine.Utils
         /// Also generates some default values if such values have not been set by the settings file.
         /// </summary>
         /// <param name="pathToSettings">Path to the settings xml file</param>
-        public void loadSettings(string pathToSettings)
+        private void loadSettings(string pathToSettings)
         {
             _config.GlobalSettings.loadSettings(pathToSettings);
 

@@ -19,16 +19,19 @@ namespace ReniBot.AimlEngine.Utils
         /// </summary>
         //private ReniBot.AimlEngine.Bot bot;
         private readonly ILogger _logger;
-        private readonly Node _graphmaster;
-        private int _graphSize = 0;
         private readonly bool _trustAiml;
         private readonly int _maxThatSize;
         private readonly ApplySubstitutions _substitutor;
         private readonly StripIllegalCharacters _stripper;
 
-        public Node GraphMaster { get { return _graphmaster; } }
+        public Node GraphMaster { get; protected set; }
 
-        public int GraphSize { get { return _graphSize; } }
+        public int GraphSize { get; private set; } = 0;
+
+        public void SetGraphMaster(Node graphMaster)
+        {
+            GraphMaster = graphMaster;
+        }
 
         /// <summary>
         /// Ctor
@@ -37,10 +40,11 @@ namespace ReniBot.AimlEngine.Utils
         public AIMLLoader(ILogger logger, ApplySubstitutions substitutor, StripIllegalCharacters stripper, bool trustAiml, int maxThatSize)
         {
             _logger = logger;
-            _graphmaster = new Node();
+            GraphMaster = new Node();
             _maxThatSize = maxThatSize;
             _substitutor = substitutor;
             _stripper = stripper;
+            _trustAiml = trustAiml;
         }
 
  
@@ -60,7 +64,7 @@ namespace ReniBot.AimlEngine.Utils
                 {
                     foreach (string filename in fileEntries)
                     {
-                        this.loadAIMLFile(filename);
+                        loadAIMLFile(filename);
                     }
                     _logger.LogInformation("Finished processing the AIML files. ");
                 }
@@ -73,7 +77,7 @@ namespace ReniBot.AimlEngine.Utils
             {
                 throw new FileNotFoundException("The directory specified as the path to the AIML files (" + path + ") cannot be found by the AIMLLoader object. Please make sure the directory where you think the AIML files are to be found is the same as the directory specified in the settings file.");
             }
-            return _graphmaster;
+            return GraphMaster;
         }
 
         /// <summary>
@@ -89,7 +93,7 @@ namespace ReniBot.AimlEngine.Utils
             XmlDocument doc = new XmlDocument();
             doc.Load(filename);
             loadAIMLFromXML(doc, filename);
-            return _graphmaster;
+            return GraphMaster;
         }
 
         /// <summary>
@@ -116,7 +120,7 @@ namespace ReniBot.AimlEngine.Utils
                     processCategory(currentNode, filename);
                 }
             }
-            return _graphmaster;
+            return GraphMaster;
         }
 
         /// <summary>
@@ -163,8 +167,8 @@ namespace ReniBot.AimlEngine.Utils
         private void processCategory(XmlNode node, string topicName, string filename)
         {
             // reference and check the required nodes
-            XmlNode pattern = this.FindNode("pattern", node);
-            XmlNode template = this.FindNode("template", node);
+            XmlNode pattern = FindNode("pattern", node);
+            XmlNode template = FindNode("template", node);
 
             if (object.Equals(null, pattern))
             {
@@ -175,16 +179,16 @@ namespace ReniBot.AimlEngine.Utils
                 throw new XmlException("Missing template tag in the node with pattern: " + pattern.InnerText + " found in " + filename);
             }
 
-            string categoryPath = this.GeneratePath(node, topicName, false);
+            string categoryPath = GeneratePath(node, topicName, false);
 
             // o.k., add the processed AIML to the GraphMaster structure
             if (categoryPath.Length > 0)
             {
                 try
                 {
-                    _graphmaster.addCategory(categoryPath, template.OuterXml, filename);
+                    GraphMaster.addCategory(categoryPath, template.OuterXml, filename);
                     // keep count of the number of categories that have been processed
-                    _graphSize++;
+                    GraphSize++;
                 }
                 catch
                 {
@@ -208,8 +212,8 @@ namespace ReniBot.AimlEngine.Utils
         private string GeneratePath(XmlNode node, string topicName, bool isUserInput)
         {
             // get the nodes that we need
-            XmlNode pattern = this.FindNode("pattern", node);
-            XmlNode that = this.FindNode("that", node);
+            XmlNode pattern = FindNode("pattern", node);
+            XmlNode that = FindNode("that", node);
 
             string patternText;
             string thatText = "*";
@@ -226,7 +230,7 @@ namespace ReniBot.AimlEngine.Utils
                 thatText = that.InnerText;
             }
 
-            return this.GeneratePath(patternText, thatText, topicName, isUserInput);
+            return GeneratePath(patternText, thatText, topicName, isUserInput);
         }
 
         /// <summary>
@@ -272,9 +276,9 @@ namespace ReniBot.AimlEngine.Utils
             }
             else
             {
-                normalizedPattern = this.Normalize(pattern, isUserInput).Trim();
-                normalizedThat = this.Normalize(that, isUserInput).Trim();
-                normalizedTopic = this.Normalize(topicName, isUserInput).Trim();
+                normalizedPattern = Normalize(pattern, isUserInput).Trim();
+                normalizedThat = Normalize(that, isUserInput).Trim();
+                normalizedTopic = Normalize(topicName, isUserInput).Trim();
             }
 
             // check sizes
