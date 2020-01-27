@@ -47,6 +47,8 @@ namespace ReniBot.AimlEngine
             _predicateService = predicateService;
             _requestService = requestService;
             _applicationService = applicationService;
+            _configurationLoader = configurationLoader;
+            _graphmaster = new Node();
         }
 
         public void Initialize()

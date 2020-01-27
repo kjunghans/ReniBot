@@ -27,6 +27,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="pathToSettings">Path to the settings xml file</param>
         private void loadSettings(string pathToSettings)
         {
+            _config.GlobalSettings = new SettingsDictionary();
             _config.GlobalSettings.loadSettings(pathToSettings);
 
             // Checks for some important default settings
@@ -148,6 +149,11 @@ namespace ReniBot.AimlEngine.Utils
                 _config.GlobalSettings.addSetting("stripperregex", "[^0-9a-zA-Z]");
             }
 
+            _config.Person2Substitutions = new SettingsDictionary();
+            _config.GenderSubstitutions = new SettingsDictionary();
+            _config.PersonSubstitutions = new SettingsDictionary();
+            _config.DefaultPredicates = new SettingsDictionary();
+            _config.Substitutions = new SettingsDictionary();
             // Load the dictionaries for this Bot from the various configuration files
             _config.Person2Substitutions.loadSettings(Path.Combine(_config.PathToConfigFiles, _config.GlobalSettings.grabSetting("person2substitutionsfile")));
             _config.PersonSubstitutions.loadSettings(Path.Combine(_config.PathToConfigFiles, _config.GlobalSettings.grabSetting("personsubstitutionsfile")));

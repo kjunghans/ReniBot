@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReniBot.AimlEngine", "ReniB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReniBot.Common", "ReniBot.Common\ReniBot.Common.csproj", "{1C14F80A-7558-4D55-B33F-C46CD530F305}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReniBot.AimlEngine.UnitTest", "ReniBot.AimlEngine.UnitTest\ReniBot.AimlEngine.UnitTest.csproj", "{488C11C3-10AE-4838-9E2C-177C3F0E80D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{1C14F80A-7558-4D55-B33F-C46CD530F305}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C14F80A-7558-4D55-B33F-C46CD530F305}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C14F80A-7558-4D55-B33F-C46CD530F305}.Release|Any CPU.Build.0 = Release|Any CPU
+		{488C11C3-10AE-4838-9E2C-177C3F0E80D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{488C11C3-10AE-4838-9E2C-177C3F0E80D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{488C11C3-10AE-4838-9E2C-177C3F0E80D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{488C11C3-10AE-4838-9E2C-177C3F0E80D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
