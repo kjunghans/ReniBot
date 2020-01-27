@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
@@ -154,6 +155,7 @@ namespace ReniBot.AimlEngine.Utils
             _config.PersonSubstitutions = new SettingsDictionary();
             _config.DefaultPredicates = new SettingsDictionary();
             _config.Substitutions = new SettingsDictionary();
+            _config.CustomTags = new Dictionary<string, TagHandler>();
             // Load the dictionaries for this Bot from the various configuration files
             _config.Person2Substitutions.loadSettings(Path.Combine(_config.PathToConfigFiles, _config.GlobalSettings.grabSetting("person2substitutionsfile")));
             _config.PersonSubstitutions.loadSettings(Path.Combine(_config.PathToConfigFiles, _config.GlobalSettings.grabSetting("personsubstitutionsfile")));
