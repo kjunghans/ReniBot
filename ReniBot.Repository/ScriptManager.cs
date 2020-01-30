@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ReniBot.Repository
 {
@@ -27,6 +22,6 @@ namespace ReniBot.Repository
             return GetScript("create_nci_Nodes.sql");
         }
 
- 
+
     }
 }

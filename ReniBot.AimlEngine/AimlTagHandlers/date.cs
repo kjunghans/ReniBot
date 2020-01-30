@@ -1,8 +1,7 @@
-using System;
-using System.Xml;
-using System.Text;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Globalization;
+using System.Xml;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -15,7 +14,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class date : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
-        private CultureInfo _local;
+        private readonly CultureInfo _local;
 
         /// <summary>
         /// Ctor

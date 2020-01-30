@@ -1,6 +1,5 @@
-using System;
-using ReniBot.Common;
 using ReniBot.AimlEngine.Utils;
+using ReniBot.Common;
 
 namespace ReniBot.AimlEngine
 {
@@ -21,11 +20,11 @@ namespace ReniBot.AimlEngine
         /// <summary>
         /// A collection of all the result objects returned to the user in this session
         /// </summary>
-        private IUserResultService _results;
+        private readonly IUserResultService _results;
 
-		/// <summary>
-		/// the value of the "topic" predicate
-		/// </summary>
+        /// <summary>
+        /// the value of the "topic" predicate
+        /// </summary>
         public string Topic
         {
             get
@@ -34,10 +33,10 @@ namespace ReniBot.AimlEngine
             }
         }
 
-		/// <summary>
-		/// the predicates associated with this particular user
-		/// </summary>
-        private IUserPredicateService _predicates;
+        /// <summary>
+        /// the predicates associated with this particular user
+        /// </summary>
+        private readonly IUserPredicateService _predicates;
 
         public IUserPredicateService Predicates { get { return _predicates; } }
 
@@ -48,7 +47,7 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                return  _converter.Convert(_results.GetLast(UserId));
+                return _converter.Convert(_results.GetLast(UserId));
             }
         }
 
@@ -62,7 +61,7 @@ namespace ReniBot.AimlEngine
         /// <param name="userKey">The GUID of the user</param>
         /// <param name="bot">the bot the user is connected to</param>
 		public User(IBotUserService botUserService, IUserPredicateService userPredicateService, IUserResultService userResultService, IUserRequestService requestService)
-		{
+        {
             _botUserService = botUserService;
             _predicates = userPredicateService;
             _results = userResultService;
@@ -70,7 +69,7 @@ namespace ReniBot.AimlEngine
             _requestService = requestService;
             _predicates.addSetting("topic", "*");
             _converter = new BotConverter(_requestService);
- 		}
+        }
 
 
         /// <summary>
@@ -95,7 +94,7 @@ namespace ReniBot.AimlEngine
         /// <returns>the first sentence of the last output from the bot</returns>
         public string getThat()
         {
-            return getThat(0,0);
+            return getThat(0, 0);
         }
 
         /// <summary>
@@ -121,7 +120,7 @@ namespace ReniBot.AimlEngine
                 Result historicResult = _converter.Convert(_results.GetNResult(n, UserId));
                 if ((sentence >= 0) & (sentence < historicResult.OutputSentences.Count))
                 {
-                    return (string)historicResult.OutputSentences[sentence];
+                    return historicResult.OutputSentences[sentence];
                 }
             }
             return string.Empty;
@@ -159,7 +158,7 @@ namespace ReniBot.AimlEngine
                 Result historicResult = _converter.Convert(_results.GetNResult(n, UserId));
                 if ((sentence >= 0) & (sentence < historicResult.InputSentences.Count))
                 {
-                    return (string)historicResult.InputSentences[sentence];
+                    return historicResult.InputSentences[sentence];
                 }
             }
             return string.Empty;

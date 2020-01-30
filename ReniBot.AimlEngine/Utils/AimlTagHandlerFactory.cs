@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using System.Xml;
 
 namespace ReniBot.AimlEngine.Utils
@@ -10,7 +8,7 @@ namespace ReniBot.AimlEngine.Utils
     public class AimlTagHandlerFactory
     {
         private readonly ILogger _logger;
-        private BotConfiguration _config;
+        private readonly BotConfiguration _config;
 
         public AimlTagHandlerFactory(ILogger logger, BotConfiguration config)
         {
@@ -36,7 +34,7 @@ namespace ReniBot.AimlEngine.Utils
                         tagHandler = new AIMLTagHandlers.date(_logger, _config.Locale, node);
                         break;
                     case "formal":
-                        tagHandler = new AIMLTagHandlers.formal(_logger,  node);
+                        tagHandler = new AIMLTagHandlers.formal(_logger, node);
                         break;
                     case "gender":
                         tagHandler = new AIMLTagHandlers.gender(_logger, _config, user, query, request, result, node);
@@ -51,10 +49,10 @@ namespace ReniBot.AimlEngine.Utils
                         tagHandler = new AIMLTagHandlers.id(_logger, user, node);
                         break;
                     case "input":
-                        tagHandler = new AIMLTagHandlers.input(_logger, user,  request, node);
+                        tagHandler = new AIMLTagHandlers.input(_logger, user, request, node);
                         break;
                     case "javascript":
-                        tagHandler = new AIMLTagHandlers.javascript(_logger,  node);
+                        tagHandler = new AIMLTagHandlers.javascript(_logger, node);
                         break;
                     case "learn":
                         tagHandler = new AIMLTagHandlers.learn(_logger, bot, node);
@@ -84,7 +82,7 @@ namespace ReniBot.AimlEngine.Utils
                         tagHandler = new AIMLTagHandlers.sr(_logger, bot, user, query, request, result, node);
                         break;
                     case "srai":
-                        tagHandler = new AIMLTagHandlers.srai(_logger, bot,  user, request, node);
+                        tagHandler = new AIMLTagHandlers.srai(_logger, bot, user, request, node);
                         break;
                     case "star":
                         tagHandler = new AIMLTagHandlers.star(_logger, user, query, request, result, node);
@@ -133,7 +131,7 @@ namespace ReniBot.AimlEngine.Utils
         {
             if (_config.CustomTags.ContainsKey(node.Name.ToLower()))
             {
-                TagHandler customTagHandler = (TagHandler)_config.CustomTags[node.Name.ToLower()];
+                TagHandler customTagHandler = _config.CustomTags[node.Name.ToLower()];
 
                 AIMLTagHandler newCustomTag = customTagHandler.Instantiate(_config.LateBindingAssemblies);
                 if (object.Equals(null, newCustomTag))

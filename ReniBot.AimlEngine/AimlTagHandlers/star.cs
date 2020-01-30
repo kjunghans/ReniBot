@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Logging;
 using System;
-using System.Text;
 using System.Xml;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
@@ -57,7 +56,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                     if (TemplateNode.Attributes.Count == 0)
                     {
                         // return the first (latest) star in the List<>
-                        return (string)_query.InputStar[0];
+                        return _query.InputStar[0];
                     }
                     else if (TemplateNode.Attributes.Count == 1)
                     {
@@ -69,7 +68,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                 index--;
                                 if ((index >= 0) & (index < _query.InputStar.Count))
                                 {
-                                    return (string)_query.InputStar[index];
+                                    return _query.InputStar[index];
                                 }
                                 else
                                 {
@@ -85,7 +84,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                 }
                 else
                 {
-                    _logger.LogWarning("A star tag tried to reference an empty InputStar collection when processing the input: "+ _request.RawInput);
+                    _logger.LogWarning("A star tag tried to reference an empty InputStar collection when processing the input: " + _request.RawInput);
                 }
             }
             return string.Empty;

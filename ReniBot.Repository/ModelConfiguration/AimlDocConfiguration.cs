@@ -5,9 +5,9 @@ using System;
 
 namespace ReniBot.Repository.ModelConfiguration
 {
-    public class AimlDocConfiguration: IEntityTypeConfiguration<AimlDoc>
+    public class AimlDocConfiguration : IEntityTypeConfiguration<AimlDoc>
     {
- 
+
         public void Configure(EntityTypeBuilder<AimlDoc> builder)
         {
             if (builder == null)

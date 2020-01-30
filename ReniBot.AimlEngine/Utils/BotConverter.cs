@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ReniBot.Common;
 using ReniBot.Entities;
-using ReniBot.Common;
+using System;
 
 namespace ReniBot.AimlEngine.Utils
 {
@@ -17,16 +13,16 @@ namespace ReniBot.AimlEngine.Utils
             _userRequestService = userRequestService;
         }
 
-        public  Result Convert(BotUserResult input)
+        public Result Convert(BotUserResult input)
         {
             BotUserRequest userRequest = _userRequestService.GetRequestById(input.requestId);
-            Result output = new Result(Convert(userRequest), input.rawOutput, new TimeSpan(0,0,0,0,input.Duration),
+            Result output = new Result(Convert(userRequest), input.rawOutput, new TimeSpan(0, 0, 0, 0, input.Duration),
                 input.hasTimedOut);
 
             return output;
         }
 
-        public  Request Convert(BotUserRequest input)
+        public Request Convert(BotUserRequest input)
         {
             Request output = new Request()
             {

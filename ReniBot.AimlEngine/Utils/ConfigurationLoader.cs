@@ -5,10 +5,9 @@ using System.Xml;
 
 namespace ReniBot.AimlEngine.Utils
 {
-    public class ConfigurationLoader: IBotConfigurationLoader
+    public class ConfigurationLoader : IBotConfigurationLoader
     {
-
-        BotConfiguration _config = new BotConfiguration();
+        readonly BotConfiguration _config = new BotConfiguration();
 
         /// <summary>
         /// Loads settings based upon the default location of the Settings.xml file

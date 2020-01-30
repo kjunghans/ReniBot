@@ -1,7 +1,5 @@
-using System;
-using System.Xml;
-using System.Text;
 using Microsoft.Extensions.Logging;
+using System.Xml;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -66,7 +64,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                 if (TemplateNode.InnerText.Length > 0)
                 {
                     // non atomic version of the node
-                    return ReniBot.AimlEngine.Normalize.ApplySubstitutions.Substitute( _config.GenderSubstitutions, TemplateNode.InnerText);
+                    return ReniBot.AimlEngine.Normalize.ApplySubstitutions.Substitute(_config.GenderSubstitutions, TemplateNode.InnerText);
                 }
                 else
                 {

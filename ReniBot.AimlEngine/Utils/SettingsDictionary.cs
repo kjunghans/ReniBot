@@ -1,8 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.IO;
 using ReniBot.AimlEngine.Normalize;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml;
 
 namespace ReniBot.AimlEngine.Utils
 {
@@ -16,13 +15,13 @@ namespace ReniBot.AimlEngine.Utils
         /// <summary>
         /// Holds a dictionary of settings
         /// </summary>
-        private Dictionary<string, string> settingsHash = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> settingsHash = new Dictionary<string, string>();
 
         /// <summary>
         /// Contains an ordered collection of all the keys (unfortunately Dictionary<,>s are
         /// not ordered)
         /// </summary>
-        private List<string> orderedKeys = new List<string>();
+        private readonly List<string> orderedKeys = new List<string>();
 
 
         /// <summary>
@@ -53,8 +52,8 @@ namespace ReniBot.AimlEngine.Utils
                     XmlNode item = result.CreateNode(XmlNodeType.Element, "item", "");
                     XmlAttribute name = result.CreateAttribute("name");
                     name.Value = key;
-                    XmlAttribute value = result.CreateAttribute( "value");
-                    value.Value = (string)settingsHash[key];
+                    XmlAttribute value = result.CreateAttribute("value");
+                    value.Value = settingsHash[key];
                     item.Attributes.Append(name);
                     item.Attributes.Append(value);
                     root.AppendChild(item);
@@ -216,7 +215,7 @@ namespace ReniBot.AimlEngine.Utils
             string normalizedName = MakeCaseInsensitive.TransformInput(name);
             if (containsSettingCalled(normalizedName))
             {
-                return (string)settingsHash[normalizedName];
+                return settingsHash[normalizedName];
             }
             else
             {

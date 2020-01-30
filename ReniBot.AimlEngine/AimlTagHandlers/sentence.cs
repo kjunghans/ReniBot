@@ -1,8 +1,8 @@
+using Microsoft.Extensions.Logging;
 using System;
-using System.Xml;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Logging;
+using System.Xml;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -18,12 +18,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class sentence : Utils.AIMLTagHandler
     {
-        BotConfiguration _config;
-        ILogger _logger;
-        User _user;
-        Utils.SubQuery _query;
-        Request _request;
-        Result _result;
+        readonly BotConfiguration _config;
+        readonly ILogger _logger;
+        readonly User _user;
+        readonly Utils.SubQuery _query;
+        readonly Request _request;
+        readonly Result _result;
 
         /// <summary>
         /// Ctor
@@ -54,7 +54,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if(TemplateNode.Name.ToLower()=="sentence")
+            if (TemplateNode.Name.ToLower() == "sentence")
             {
                 if (TemplateNode.InnerText.Length > 0)
                 {

@@ -1,4 +1,3 @@
-using ReniBot.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +19,7 @@ namespace ReniBot.AimlEngine
         /// </summary>
         public string RawInput { get; set; }
 
-        
+
 
         /// <summary>
         /// The normalized sentence(s) (paths) fed into the graphmaster
@@ -30,7 +29,7 @@ namespace ReniBot.AimlEngine
         /// <summary>
         /// The amount of time the request took to process
         /// </summary>
-        public TimeSpan Duration {get; set;}
+        public TimeSpan Duration { get; set; }
 
         public bool HasTimedOut { get; set; }
 
@@ -105,8 +104,8 @@ namespace ReniBot.AimlEngine
         /// </summary>
         public List<string> InputSentences = new List<string>();
 
-        private int _userId;
-        private string[] Splitters = { ".", "!", "?", ";", ":" };
+        private readonly int _userId;
+        private readonly string[] Splitters = { ".", "!", "?", ";", ":" };
 
         public int UserId { get { return _userId; } }
 

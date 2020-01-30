@@ -1,5 +1,3 @@
-using System;
-using System.Text;
 using System.Collections.Generic;
 
 namespace ReniBot.AimlEngine.Normalize
@@ -13,7 +11,7 @@ namespace ReniBot.AimlEngine.Normalize
         /// <summary>
         /// The bot this sentence splitter is associated with
         /// </summary>
-        private BotConfiguration _config;
+        private readonly BotConfiguration _config;
 
         /// <summary>
         /// The raw input string
@@ -59,7 +57,7 @@ namespace ReniBot.AimlEngine.Normalize
         /// <returns>An array of strings representing the constituent "sentences"</returns>
         public string[] Transform(string inputString)
         {
-            string[] tokens = (string[])_config.Splitters.ToArray();
+            string[] tokens = _config.Splitters.ToArray();
             string[] rawResult = inputString.Split(tokens, System.StringSplitOptions.RemoveEmptyEntries);
             List<string> tidyResult = new List<string>();
             foreach (string rawSentence in rawResult)
@@ -70,7 +68,7 @@ namespace ReniBot.AimlEngine.Normalize
                     tidyResult.Add(tidySentence);
                 }
             }
-            return (string[])tidyResult.ToArray();
+            return tidyResult.ToArray();
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using ReniBot.Repository;
+﻿using ReniBot.Common;
 using ReniBot.Entities;
-using ReniBot.Common;
+using ReniBot.Repository;
+using System.Linq;
 
 namespace ReniBot.Service
 {

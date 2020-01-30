@@ -1,8 +1,6 @@
-using System;
-using System.Xml;
-using System.Text;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -94,7 +92,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class condition : Utils.AIMLTagHandler
     {
-        User _user;
+        readonly User _user;
         /// <summary>
         /// Ctor
         /// </summary>
@@ -212,7 +210,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                 if ((name.Length > 0) & (value.Length > 0))
                                 {
                                     string actualValue = _user.Predicates.grabSetting(name);
-                                    Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*","[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
+                                    Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
                                     if (matcher.IsMatch(actualValue))
                                     {
                                         return childLINode.InnerXml;

@@ -1,12 +1,11 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using ReniBot.Entities;
+using System;
 
 namespace ReniBot.Repository.ModelConfiguration
 {
-    public class BrainConfiguration: IEntityTypeConfiguration<Brain>
+    public class BrainConfiguration : IEntityTypeConfiguration<Brain>
     {
 
         public void Configure(EntityTypeBuilder<Brain> builder)

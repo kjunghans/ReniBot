@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ReniBot.Repository
 {
-    public class BotContext: DbContext
+    public class BotContext : DbContext
     {
         public BotContext(DbContextOptions options) : base(options) { }
 

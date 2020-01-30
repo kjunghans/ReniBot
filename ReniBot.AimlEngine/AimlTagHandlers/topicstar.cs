@@ -1,6 +1,6 @@
+using Microsoft.Extensions.Logging;
 using System;
 using System.Xml;
-using Microsoft.Extensions.Logging;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -16,9 +16,9 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class topicstar : Utils.AIMLTagHandler
     {
-        Utils.SubQuery _query;
-        Request _request;
-        ILogger _logger;
+        readonly Utils.SubQuery _query;
+        readonly Request _request;
+        readonly ILogger _logger;
 
         /// <summary>
         /// Ctor
@@ -51,7 +51,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                 {
                     if (_query.TopicStar.Count > 0)
                     {
-                        return (string)_query.TopicStar[0];
+                        return _query.TopicStar[0];
                     }
                     else
                     {
@@ -71,7 +71,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                 {
                                     if (result > 0)
                                     {
-                                        return (string)_query.TopicStar[result - 1];
+                                        return _query.TopicStar[result - 1];
                                     }
                                     else
                                     {

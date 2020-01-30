@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ReniBot.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ReniBot.Entities;
 using System;
 
 namespace ReniBot.Repository.ModelConfiguration
 {
-    public class SettingConfiguration: IEntityTypeConfiguration<Setting>
+    public class SettingConfiguration : IEntityTypeConfiguration<Setting>
     {
- 
+
         public void Configure(EntityTypeBuilder<Setting> builder)
         {
             if (builder == null)

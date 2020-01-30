@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Data;
-using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace ReniBot.Repository
@@ -52,7 +52,7 @@ namespace ReniBot.Repository
         public virtual IEnumerable<TEntity> PagedGet(int pageIndex, int pageSize,
            Expression<Func<TEntity, bool>> filter = null,
            Expression<Func<TEntity, string>> orderBy = null,
-           string includeProperties = "" )
+           string includeProperties = "")
         {
             IQueryable<TEntity> query = _dbSet;
 
@@ -77,8 +77,8 @@ namespace ReniBot.Repository
                 query = query.Include(includeProperty);
             }
 
-             return query.ToList();
-            
+            return query.ToList();
+
         }
 
         public virtual TEntity GetFirst(Expression<Func<TEntity, bool>> filter,
@@ -86,7 +86,7 @@ namespace ReniBot.Repository
         {
             IQueryable<TEntity> query = _dbSet;
 
-            
+
             if (orderBy != null)
             {
                 query = query.OrderBy(orderBy);
@@ -150,7 +150,7 @@ namespace ReniBot.Repository
 
         public virtual void Delete(TEntity entityToDelete)
         {
-            if (_context.Entry(entityToDelete).State ==  EntityState.Detached)
+            if (_context.Entry(entityToDelete).State == EntityState.Detached)
             {
                 _dbSet.Attach(entityToDelete);
             }

@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace ReniBot.Repository

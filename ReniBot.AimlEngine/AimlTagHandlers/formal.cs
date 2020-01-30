@@ -1,7 +1,6 @@
-using System;
-using System.Xml;
-using System.Text;
 using Microsoft.Extensions.Logging;
+using System.Text;
+using System.Xml;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {

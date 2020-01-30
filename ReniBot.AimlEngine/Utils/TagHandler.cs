@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 
 namespace ReniBot.AimlEngine.Utils
@@ -34,7 +33,7 @@ namespace ReniBot.AimlEngine.Utils
         {
             if (Assemblies.ContainsKey(AssemblyName))
             {
-                Assembly tagDLL = (Assembly)Assemblies[AssemblyName]; 
+                Assembly tagDLL = Assemblies[AssemblyName];
                 Type[] tagDLLTypes = tagDLL.GetTypes();
                 return (AIMLTagHandler)tagDLL.CreateInstance(ClassName);
             }

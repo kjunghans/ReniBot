@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.Text;
-using System.Net.Mail;
+using Microsoft.Extensions.Logging;
 using ReniBot.AimlEngine.Utils;
 using ReniBot.Common;
 using ReniBot.Entities;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Net.Mail;
+using System.Text;
+using System.Xml;
 
 namespace ReniBot.AimlEngine
 {
@@ -19,14 +19,14 @@ namespace ReniBot.AimlEngine
         public string AppKey { get; set; }
         private BotConfiguration _config;
         private int _appId;
-        private ILogger _logger;
+        private readonly ILogger _logger;
         /// <summary>
         /// The "brain" of the bot
         /// </summary>
-        private Node _graphmaster;
+        private readonly Node _graphmaster;
         private AimlTagHandlerFactory _tagFactory;
-        private IBotUserService _botUserService;
-        private IUserResultService _userResultService;
+        private readonly IBotUserService _botUserService;
+        private readonly IUserResultService _userResultService;
         private readonly IAimlLoader _loader;
         private readonly IUserPredicateService _predicateService;
         private readonly IUserRequestService _requestService;
@@ -36,8 +36,8 @@ namespace ReniBot.AimlEngine
         /// <summary>
         /// Ctor
         /// </summary>
-        public Bot(IBotConfigurationLoader configurationLoader, ILogger logger, IBotUserService botUserService, 
-            IUserResultService resultService, IAimlLoader loader, IUserPredicateService predicateService, 
+        public Bot(IBotConfigurationLoader configurationLoader, ILogger logger, IBotUserService botUserService,
+            IUserResultService resultService, IAimlLoader loader, IUserPredicateService predicateService,
             IUserRequestService requestService, IApplicationService applicationService)
         {
             _logger = logger;
@@ -171,7 +171,7 @@ namespace ReniBot.AimlEngine
                 request.HasTimedOut = true;
                 return string.Empty;
             }
-                        
+
             // process the node
             string tagName = node.Name.ToLower();
             if (tagName == "template")
@@ -234,7 +234,7 @@ namespace ReniBot.AimlEngine
             }
         }
 
- 
+
         /// <summary>
         /// Attempts to send an email to the botmaster at the AdminEmail address setting with error messages
         /// resulting from a query to the bot
@@ -282,7 +282,7 @@ The ReniBot.AimlEngine program.
             //}
             message = message.Replace("*PATHS*", paths.ToString());
             msg.Body = message;
-            msg.IsBodyHtml=false;
+            msg.IsBodyHtml = false;
             try
             {
                 if (msg.To.Count > 0)

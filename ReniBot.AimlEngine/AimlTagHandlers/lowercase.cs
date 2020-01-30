@@ -1,6 +1,6 @@
-using System.Xml;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
+using System.Xml;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -14,7 +14,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class lowercase : Utils.AIMLTagHandler
     {
-        CultureInfo _locale;
+        readonly CultureInfo _locale;
 
         /// <summary>
         /// Ctor

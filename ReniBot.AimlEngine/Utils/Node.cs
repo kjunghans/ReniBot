@@ -15,7 +15,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <summary>
         /// Contains the child nodes of this node
         /// </summary>
-        private Dictionary<string, Node> children = new Dictionary<string, Node>();
+        private readonly Dictionary<string, Node> children = new Dictionary<string, Node>();
 
         /// <summary>
         /// The number of direct children (non-recursive) of this node
@@ -41,7 +41,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <summary>
         /// The word that identifies this node to it's parent node
         /// </summary>
-        public string word=string.Empty;
+        public string word = string.Empty;
 
         /// <summary>
         /// Adds a category to the node
@@ -121,7 +121,7 @@ namespace ReniBot.AimlEngine.Utils
 
             // check if this is the end of a branch in the GraphMaster 
             // return the cCategory for this node
-            if (children.Count==0)
+            if (children.Count == 0)
             {
                 if (path.Length > 0)
                 {
@@ -152,18 +152,18 @@ namespace ReniBot.AimlEngine.Utils
             // wildcard. "_" comes first in precedence in the AIML alphabet
             if (children.ContainsKey("_"))
             {
-                Node childNode = (Node)children["_"];
+                Node childNode = children["_"];
 
                 // add the next word to the wildcard match 
                 StringBuilder newWildcard = new StringBuilder();
-                storeWildCard(splitPath[0],newWildcard);
-                
+                storeWildCard(splitPath[0], newWildcard);
+
                 // move down into the identified branch of the GraphMaster structure
                 string result = childNode.evaluate(newPath, query, request, matchstate, newWildcard, timeOut);
 
                 // and if we get a result from the branch process the wildcard matches and return 
                 // the result
-                if (result.Length>0)
+                if (result.Length > 0)
                 {
                     if (newWildcard.Length > 0)
                     {
@@ -206,11 +206,11 @@ namespace ReniBot.AimlEngine.Utils
                     newMatchstate = MatchState.Topic;
                 }
 
-                Node childNode = (Node)children[firstWord];
+                Node childNode = children[firstWord];
                 // move down into the identified branch of the GraphMaster structure using the new
                 // matchstate
                 StringBuilder newWildcard = new StringBuilder();
-                string result = childNode.evaluate(newPath, query, request, newMatchstate,newWildcard, timeOut);
+                string result = childNode.evaluate(newPath, query, request, newMatchstate, newWildcard, timeOut);
                 // and if we get a result from the child return it
                 if (result.Length > 0)
                 {
@@ -244,7 +244,7 @@ namespace ReniBot.AimlEngine.Utils
             if (children.ContainsKey("*"))
             {
                 // o.k. look for the path in the child node denoted by "*"
-                Node childNode = (Node)children["*"];
+                Node childNode = children["*"];
 
                 // add the next word to the wildcard match 
                 StringBuilder newWildcard = new StringBuilder();

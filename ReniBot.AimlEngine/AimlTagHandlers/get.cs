@@ -1,7 +1,5 @@
-using System;
-using System.Xml;
-using System.Text;
 using Microsoft.Extensions.Logging;
+using System.Xml;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -23,9 +21,9 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class get : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
-        ILogger _logger;
-        BotConfiguration _config;
-        User _user;
+        readonly ILogger _logger;
+        readonly BotConfiguration _config;
+        readonly User _user;
 
         /// <summary>
         /// Ctor

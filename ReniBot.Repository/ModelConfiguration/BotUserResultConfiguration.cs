@@ -5,7 +5,7 @@ using System;
 
 namespace ReniBot.Repository.ModelConfiguration
 {
-    public class BotUserResultConfiguration: IEntityTypeConfiguration<BotUserResult>
+    public class BotUserResultConfiguration : IEntityTypeConfiguration<BotUserResult>
     {
 
         public void Configure(EntityTypeBuilder<BotUserResult> builder)

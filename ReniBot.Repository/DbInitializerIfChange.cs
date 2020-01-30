@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-
-namespace ReniBot.Repository
+﻿namespace ReniBot.Repository
 {
     // In .net core you initialize in startup.cs.  see https://stackoverflow.com/questions/42355481/auto-create-database-in-entity-framework-core
     //class DbInitializerIfChange : DropCreateDatabaseIfModelChanges<BotContext>

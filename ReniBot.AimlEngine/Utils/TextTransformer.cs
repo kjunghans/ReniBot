@@ -1,5 +1,3 @@
-using System;
-
 namespace ReniBot.AimlEngine.Utils
 {
     /// <summary>
@@ -23,13 +21,13 @@ namespace ReniBot.AimlEngine.Utils
         /// The input string to be transformed in some way
         /// </summary>
         public string InputString { get; set; }
- 
+
         /// <summary>
         /// The transformed string
         /// </summary>
         public string OutputString
         {
-            get{return Transform();}
+            get { return Transform(); }
         }
 
         /// <summary>
@@ -42,7 +40,7 @@ namespace ReniBot.AimlEngine.Utils
             InputString = inputString;
         }
 
- 
+
         /// <summary>
         /// Default ctor for used as part of late binding mechanism
         /// </summary>
@@ -68,7 +66,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <returns>The resulting transformed string</returns>
         public string Transform()
         {
-           
+
             if (InputString.Length > 0)
             {
                 return ProcessChange();

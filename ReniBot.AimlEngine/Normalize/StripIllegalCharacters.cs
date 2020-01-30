@@ -1,6 +1,4 @@
-using System;
 using System.Text.RegularExpressions;
-using System.Text;
 
 namespace ReniBot.AimlEngine.Normalize
 {
@@ -10,14 +8,14 @@ namespace ReniBot.AimlEngine.Normalize
     /// </summary>
     public class StripIllegalCharacters : ReniBot.AimlEngine.Utils.TextTransformer
     {
-        private Regex _strippers;
-        public StripIllegalCharacters(Regex strippers, string inputString) : base( inputString)
+        private readonly Regex _strippers;
+        public StripIllegalCharacters(Regex strippers, string inputString) : base(inputString)
         {
             _strippers = strippers;
         }
 
         public StripIllegalCharacters(Regex strippers)
-            : base() 
+            : base()
         {
             _strippers = strippers;
         }

@@ -12,12 +12,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class sr : Utils.AIMLTagHandler
     {
-        ILogger _logger;
-        User _user;
-        Utils.SubQuery _query;
-        Request _request;
-        Result _result;
-        Bot _bot;
+        readonly ILogger _logger;
+        readonly User _user;
+        readonly Utils.SubQuery _query;
+        readonly Request _request;
+        readonly Result _result;
+        readonly Bot _bot;
 
         /// <summary>
         /// Ctor
@@ -54,8 +54,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                 star recursiveStar = new star(_logger, _user, _query, _request, _result, starNode);
                 string starContent = recursiveStar.Transform();
 
-                XmlNode sraiNode = ReniBot.AimlEngine.Utils.AIMLTagHandler.getNode("<srai>"+starContent+"</srai>");
-                srai sraiHandler = new srai(_logger, _bot,  _user, _request, sraiNode);
+                XmlNode sraiNode = ReniBot.AimlEngine.Utils.AIMLTagHandler.getNode("<srai>" + starContent + "</srai>");
+                srai sraiHandler = new srai(_logger, _bot, _user, _request, sraiNode);
                 return sraiHandler.Transform();
             }
             return string.Empty;

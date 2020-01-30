@@ -5,9 +5,9 @@ using System;
 
 namespace ReniBot.Repository.ModelConfiguration
 {
-    public class BotUserConfiguration: IEntityTypeConfiguration<BotUser>
+    public class BotUserConfiguration : IEntityTypeConfiguration<BotUser>
     {
-  
+
         public void Configure(EntityTypeBuilder<BotUser> builder)
         {
             if (builder == null)

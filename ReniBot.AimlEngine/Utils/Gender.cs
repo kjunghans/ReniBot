@@ -1,5 +1,3 @@
-using System;
-
 namespace ReniBot.AimlEngine.Utils
 {
     /// <summary>

@@ -1,7 +1,7 @@
-using System;
-using System.Xml;
-using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Xml;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -46,7 +46,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                     if (listNodes.Count > 0)
                     {
                         Random r = new Random();
-                        XmlNode chosenNode = (XmlNode)listNodes[r.Next(listNodes.Count)];
+                        XmlNode chosenNode = listNodes[r.Next(listNodes.Count)];
                         return chosenNode.InnerXml;
                     }
                 }

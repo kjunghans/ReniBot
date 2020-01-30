@@ -61,7 +61,7 @@ namespace ReniBot.AimlEngine
         /// <summary>
         /// A buffer to hold log messages to be written out to the log file when a max size is reached
         /// </summary>
-        private List<string> LogBuffer = new List<string>();
+        private readonly List<string> LogBuffer = new List<string>();
 
         /// <summary>
         /// How big to let the log buffer get before writing to disk
@@ -276,7 +276,7 @@ namespace ReniBot.AimlEngine
         /// </summary>
         public int Size;
 
-         /// <summary>
+        /// <summary>
         /// If set to false the input from AIML files will undergo the same normalization process that
         /// user input goes through. If true the bot will assume the AIML is correct. Defaults to true.
         /// </summary>

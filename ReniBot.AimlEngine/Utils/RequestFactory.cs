@@ -9,7 +9,7 @@ namespace ReniBot.AimlEngine.Utils
         {
             _userRequestService = userRequestService;
         }
-        public  Request Create(string input, int userId)
+        public Request Create(string input, int userId)
         {
             int requestId = _userRequestService.Add(input, userId);
             Request request = new Request(input, userId);

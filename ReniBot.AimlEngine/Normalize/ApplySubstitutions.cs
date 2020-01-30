@@ -10,9 +10,9 @@ namespace ReniBot.AimlEngine.Normalize
     /// </summary>
     public class ApplySubstitutions : Utils.TextTransformer
     {
-        private Utils.SettingsDictionary _substitutions;
+        private readonly Utils.SettingsDictionary _substitutions;
         public ApplySubstitutions(Utils.SettingsDictionary substitutions, string inputString)
-            : base( inputString)
+            : base(inputString)
         {
             _substitutions = substitutions;
         }
@@ -60,7 +60,7 @@ namespace ReniBot.AimlEngine.Normalize
                 string p2 = ApplySubstitutions.makeRegexSafe(pattern);
                 //string match = "\\b"+@p2.Trim().Replace(" ","\\s*")+"\\b";
                 string match = "\\b" + p2.TrimEnd().TrimStart() + "\\b";
-                string replacement = marker+dictionary.grabSetting(pattern).Trim()+marker;
+                string replacement = marker + dictionary.grabSetting(pattern).Trim() + marker;
                 result = Regex.Replace(result, match, replacement, RegexOptions.IgnoreCase);
             }
 
@@ -75,7 +75,7 @@ namespace ReniBot.AimlEngine.Normalize
         /// <returns>the safe version</returns>
         private static string makeRegexSafe(string input)
         {
-            string result = input.Replace("\\","");
+            string result = input.Replace("\\", "");
             result = result.Replace(")", "\\)");
             result = result.Replace("(", "\\(");
             result = result.Replace(".", "\\.");

@@ -1,16 +1,13 @@
-using System;
-using Xunit;
-using ReniBot.Common;
-using ReniBot.AimlEngine;
-using ReniBot.AimlEngine.Utils;
-using Microsoft.Extensions.Logging;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Moq;
+using ReniBot.AimlEngine.Utils;
+using ReniBot.Common;
 using ReniBot.Entities;
 using System.Collections.Generic;
 using System.IO;
-using System.Xml;
+using System.Text.RegularExpressions;
+using Xunit;
 
 namespace ReniBot.AimlEngine.UnitTest
 {

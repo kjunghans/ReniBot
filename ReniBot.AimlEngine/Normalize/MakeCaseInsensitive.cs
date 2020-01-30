@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace ReniBot.AimlEngine.Normalize
 {
     /// <summary>
@@ -9,10 +5,10 @@ namespace ReniBot.AimlEngine.Normalize
     /// </summary>
     public class MakeCaseInsensitive : ReniBot.AimlEngine.Utils.TextTransformer
     {
-        public MakeCaseInsensitive( string inputString) : base(inputString)
+        public MakeCaseInsensitive(string inputString) : base(inputString)
         { }
 
-     
+
         protected override string ProcessChange()
         {
             return InputString.ToUpper();

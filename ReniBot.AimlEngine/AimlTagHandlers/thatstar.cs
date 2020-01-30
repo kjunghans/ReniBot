@@ -1,7 +1,6 @@
+using Microsoft.Extensions.Logging;
 using System;
 using System.Xml;
-using System.Text;
-using Microsoft.Extensions.Logging;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -37,7 +36,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                         ReniBot.AimlEngine.Request request,
                         ReniBot.AimlEngine.Result result,
                         XmlNode templateNode)
-            : base( logger, templateNode)
+            : base(logger, templateNode)
         {
             _query = query;
             _request = request;
@@ -51,7 +50,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                 {
                     if (_query.ThatStar.Count > 0)
                     {
-                        return (string)_query.ThatStar[0];
+                        return _query.ThatStar[0];
                     }
                     else
                     {
@@ -71,7 +70,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                 {
                                     if (result > 0)
                                     {
-                                        return (string)_query.ThatStar[result - 1];
+                                        return _query.ThatStar[result - 1];
                                     }
                                     else
                                     {

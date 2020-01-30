@@ -1,16 +1,14 @@
 using Microsoft.Extensions.Logging;
-using System;
-using System.Text;
 using System.Xml;
 
-namespace ReniBot.AimlEngine.Utils 
+namespace ReniBot.AimlEngine.Utils
 {
     /// <summary>
     /// The template for all classes that handle the AIML tags found within template nodes of a
     /// category.
     /// </summary>
     abstract public class AIMLTagHandler : TextTransformer
-    { 
+    {
         /// <summary>
         /// Ctor
         /// </summary>
@@ -20,8 +18,8 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="request">The request itself</param>
         /// <param name="result">The result to be passed back to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public AIMLTagHandler   (   ILogger logger,
-                                    XmlNode templateNode) :base(templateNode.OuterXml)
+        public AIMLTagHandler(ILogger logger,
+                                    XmlNode templateNode) : base(templateNode.OuterXml)
         {
             Logger = logger;
             TemplateNode = templateNode;
@@ -41,7 +39,7 @@ namespace ReniBot.AimlEngine.Utils
         /// </summary>
         public bool isRecursive = true;
 
-         /// <summary>
+        /// <summary>
         /// The template node to be processed by the class
         /// </summary>
         public XmlNode TemplateNode;

@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ReniBot.AimlEngine
 {
@@ -24,7 +22,7 @@ namespace ReniBot.AimlEngine
         /// <summary>
         /// The user who made this request
         /// </summary>
-        public int UserId {get; set;}
+        public int UserId { get; set; }
 
 
         /// <summary>

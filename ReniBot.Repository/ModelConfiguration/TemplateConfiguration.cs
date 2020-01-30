@@ -5,9 +5,9 @@ using System;
 
 namespace ReniBot.Repository.ModelConfiguration
 {
-    public class TemplateConfiguration: IEntityTypeConfiguration<Template>
+    public class TemplateConfiguration : IEntityTypeConfiguration<Template>
     {
- 
+
         public void Configure(EntityTypeBuilder<Template> builder)
         {
             if (builder == null)

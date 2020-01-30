@@ -13,8 +13,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class gossip : Utils.AIMLTagHandler
     {
-        ILogger _logger;
-        User _user;
+        readonly ILogger _logger;
+        readonly User _user;
 
         /// <summary>
         /// Ctor
@@ -41,7 +41,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                 // gossip is merely logged by the bot and written to log files
                 if (TemplateNode.InnerText.Length > 0)
                 {
-                    _logger.LogInformation("GOSSIP from user: "+ _user.UserKey+", '"+TemplateNode.InnerText+"'");
+                    _logger.LogInformation("GOSSIP from user: " + _user.UserKey + ", '" + TemplateNode.InnerText + "'");
                 }
             }
             return string.Empty;

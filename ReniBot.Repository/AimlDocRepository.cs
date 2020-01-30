@@ -2,7 +2,7 @@
 
 namespace ReniBot.Repository
 {
-    public class AimlDocRepository: GenericRepository<AimlDoc>
+    public class AimlDocRepository : GenericRepository<AimlDoc>
     {
         public AimlDocRepository(BotContext context) : base(context) { }
 

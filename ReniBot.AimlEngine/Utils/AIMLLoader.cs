@@ -1,10 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Xml;
-using System.IO;
-using System.Text;
 using Microsoft.Extensions.Logging;
 using ReniBot.AimlEngine.Normalize;
+using System.IO;
+using System.Text;
+using System.Xml;
 
 namespace ReniBot.AimlEngine.Utils
 {
@@ -12,7 +10,7 @@ namespace ReniBot.AimlEngine.Utils
     /// A utility class for loading AIML files from disk into the graphmaster structure that 
     /// forms an AIML bot's "brain"
     /// </summary>
-    public class AIMLLoader: IAimlLoader
+    public class AIMLLoader : IAimlLoader
     {
         /// <summary>
         /// The bot whose brain is being processed
@@ -47,7 +45,7 @@ namespace ReniBot.AimlEngine.Utils
             _trustAiml = trustAiml;
         }
 
- 
+
         /// <summary>
         /// Loads the AIML from files found in the path
         /// </summary>
@@ -57,7 +55,7 @@ namespace ReniBot.AimlEngine.Utils
             if (Directory.Exists(path))
             {
                 // process the AIML
-                _logger.LogInformation("Starting to process AIML files found in the directory {0}" , path);
+                _logger.LogInformation("Starting to process AIML files found in the directory {0}", path);
 
                 string[] fileEntries = Directory.GetFiles(path, "*.aiml");
                 if (fileEntries.Length > 0)
@@ -88,7 +86,7 @@ namespace ReniBot.AimlEngine.Utils
         public Node loadAIMLFile(string filename)
         {
             _logger.LogInformation("Processing AIML file: {0}", filename);
-            
+
             // load the document
             XmlDocument doc = new XmlDocument();
             doc.Load(filename);
@@ -132,8 +130,8 @@ namespace ReniBot.AimlEngine.Utils
         private void processTopic(XmlNode node, string filename)
         {
             // find the name of the topic or set to default "*"
-            string topicName="*";
-            if((node.Attributes.Count==1)&(node.Attributes[0].Name=="name"))
+            string topicName = "*";
+            if ((node.Attributes.Count == 1) & (node.Attributes[0].Name == "name"))
             {
                 topicName = node.Attributes["name"].Value;
             }
@@ -241,7 +239,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <returns>The node (or null)</returns>
         private XmlNode FindNode(string name, XmlNode node)
         {
-            foreach(XmlNode child in node.ChildNodes)
+            foreach (XmlNode child in node.ChildNodes)
             {
                 if (child.Name == name)
                 {
@@ -268,7 +266,7 @@ namespace ReniBot.AimlEngine.Utils
             string normalizedThat = "*";
             string normalizedTopic = "*";
 
-            if ((_trustAiml)&(!isUserInput))
+            if ((_trustAiml) & (!isUserInput))
             {
                 normalizedPattern = pattern.Trim();
                 normalizedThat = that.Trim();
@@ -326,7 +324,7 @@ namespace ReniBot.AimlEngine.Utils
         {
             StringBuilder result = new StringBuilder();
 
-             string substitutedInput = _substitutor.Transform(input);
+            string substitutedInput = _substitutor.Transform(input);
             // split the pattern into it's component words
             string[] substitutedWords = substitutedInput.Split(" \r\n\t".ToCharArray());
 
@@ -352,7 +350,7 @@ namespace ReniBot.AimlEngine.Utils
                 result.Append(normalizedWord.Trim() + " ");
             }
 
-            return result.ToString().Replace("  "," "); // make sure the whitespace is neat
+            return result.ToString().Replace("  ", " "); // make sure the whitespace is neat
         }
     }
 }

@@ -1,8 +1,6 @@
-using System;
-using System.Xml;
-using System.Text;
 using Microsoft.Extensions.Logging;
 using ReniBot.AimlEngine.Utils;
+using System.Xml;
 
 namespace ReniBot.AimlEngine.AIMLTagHandlers
 {
@@ -19,7 +17,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class bot : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
-        SettingsDictionary _settings;
+        readonly SettingsDictionary _settings;
 
         /// <summary>
         /// Ctor
@@ -47,7 +45,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                     if (TemplateNode.Attributes[0].Name.ToLower() == "name")
                     {
                         string key = TemplateNode.Attributes["name"].Value;
-                        return (string)_settings.grabSetting(key);
+                        return _settings.grabSetting(key);
                     }
                 }
             }

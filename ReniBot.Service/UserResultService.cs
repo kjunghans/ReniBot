@@ -1,14 +1,14 @@
-﻿using System;
-using System.Linq;
-using ReniBot.Common;
+﻿using ReniBot.Common;
 using ReniBot.Entities;
 using ReniBot.Repository;
+using System;
+using System.Linq;
 
 namespace ReniBot.Service
 {
     public class UserResultService : IUserResultService
     {
- 
+
         public int Count(int userId)
         {
             UnitOfWork uow = new UnitOfWork();
