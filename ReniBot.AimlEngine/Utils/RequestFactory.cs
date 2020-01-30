@@ -13,7 +13,7 @@ namespace ReniBot.AimlEngine.Utils
         {
             int requestId = _userRequestService.Add(input, userId);
             Request request = new Request(input, userId);
-            request.id = requestId;
+            request.Id = requestId;
 
             return request;
         }

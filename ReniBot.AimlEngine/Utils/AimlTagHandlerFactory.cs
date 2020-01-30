@@ -21,7 +21,7 @@ namespace ReniBot.AimlEngine.Utils
         public AIMLTagHandler CreateTagHandler(string tagName, Bot bot, User user, SubQuery query, Request request, Result result, XmlNode node)
         {
             AIMLTagHandler tagHandler = null;
-            tagHandler = this.getBespokeTags(user, query, request, result, node);
+            tagHandler = getBespokeTags(user, query, request, result, node);
             if (object.Equals(null, tagHandler))
             {
                 switch (tagName)

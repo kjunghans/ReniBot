@@ -40,13 +40,13 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "bot")
+            if (TemplateNode.Name.ToLower() == "bot")
             {
-                if (this.templateNode.Attributes.Count == 1)
+                if (TemplateNode.Attributes.Count == 1)
                 {
-                    if (this.templateNode.Attributes[0].Name.ToLower() == "name")
+                    if (TemplateNode.Attributes[0].Name.ToLower() == "name")
                     {
-                        string key = this.templateNode.Attributes["name"].Value;
+                        string key = TemplateNode.Attributes["name"].Value;
                         return (string)_settings.grabSetting(key);
                     }
                 }

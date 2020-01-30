@@ -48,7 +48,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "sr")
+            if (TemplateNode.Name.ToLower() == "sr")
             {
                 XmlNode starNode = Utils.AIMLTagHandler.getNode("<star/>");
                 star recursiveStar = new star(_logger, _user, _query, _request, _result, starNode);

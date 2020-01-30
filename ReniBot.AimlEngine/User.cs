@@ -66,7 +66,7 @@ namespace ReniBot.AimlEngine
             _botUserService = botUserService;
             _predicates = userPredicateService;
             _results = userResultService;
-            //this.bot.DefaultPredicates.Clone(this.Predicates);
+            //bot.DefaultPredicates.Clone(Predicates);
             _requestService = requestService;
             _predicates.addSetting("topic", "*");
             _converter = new BotConverter(_requestService);
@@ -79,7 +79,7 @@ namespace ReniBot.AimlEngine
         /// <returns>the string to use for that</returns>
         public string getLastBotOutput()
         {
-            if (this._results.Count(UserId) > 0)
+            if (_results.Count(UserId) > 0)
             {
                 return (_converter.Convert(_results.GetLast(UserId))).RawOutput;
             }
@@ -95,7 +95,7 @@ namespace ReniBot.AimlEngine
         /// <returns>the first sentence of the last output from the bot</returns>
         public string getThat()
         {
-            return this.getThat(0,0);
+            return getThat(0,0);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace ReniBot.AimlEngine
         /// <returns>the first sentence of the output "n" steps ago from the bot</returns>
         public string getThat(int n)
         {
-            return this.getThat(n, 0);
+            return getThat(n, 0);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace ReniBot.AimlEngine
         /// <returns>the sentence numbered by "sentence" of the output "n" steps ago from the bot</returns>
         public string getThat(int n, int sentence)
         {
-            if ((n >= 0) & (n < this._results.Count(UserId)))
+            if ((n >= 0) & (n < _results.Count(UserId)))
             {
                 Result historicResult = _converter.Convert(_results.GetNResult(n, UserId));
                 if ((sentence >= 0) & (sentence < historicResult.OutputSentences.Count))
@@ -133,7 +133,7 @@ namespace ReniBot.AimlEngine
         /// <returns>the first sentence of the last output from the bot</returns>
         public string getResultSentence()
         {
-            return this.getResultSentence(0, 0);
+            return getResultSentence(0, 0);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace ReniBot.AimlEngine
         /// <returns>the first sentence from the output from the bot "n" steps ago</returns>
         public string getResultSentence(int n)
         {
-            return this.getResultSentence(n, 0);
+            return getResultSentence(n, 0);
         }
 
         /// <summary>
@@ -154,9 +154,9 @@ namespace ReniBot.AimlEngine
         /// <returns>the identified sentence number from the output from the bot "n" steps ago</returns>
         public string getResultSentence(int n, int sentence)
         {
-            if ((n >= 0) & (n < this._results.Count(UserId)))
+            if ((n >= 0) & (n < _results.Count(UserId)))
             {
-                Result historicResult = _converter.Convert(this._results.GetNResult(n, UserId));
+                Result historicResult = _converter.Convert(_results.GetNResult(n, UserId));
                 if ((sentence >= 0) & (sentence < historicResult.InputSentences.Count))
                 {
                     return (string)historicResult.InputSentences[sentence];
@@ -171,8 +171,8 @@ namespace ReniBot.AimlEngine
         /// <param name="latestResult">the latest result from the bot</param>
         public void addResult(Result latestResult)
         {
-            this._results.Add(latestResult.Duration.Milliseconds, latestResult.HasTimedOut, latestResult.RawOutput,
-                latestResult.requestId, latestResult.UserId);
+            _results.Add(latestResult.Duration.Milliseconds, latestResult.HasTimedOut, latestResult.RawOutput,
+                latestResult.RequestId, latestResult.UserId);
         }
     }
 }

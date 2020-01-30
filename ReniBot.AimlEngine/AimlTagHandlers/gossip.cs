@@ -36,12 +36,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "gossip")
+            if (TemplateNode.Name.ToLower() == "gossip")
             {
                 // gossip is merely logged by the bot and written to log files
-                if (this.templateNode.InnerText.Length > 0)
+                if (TemplateNode.InnerText.Length > 0)
                 {
-                    _logger.LogInformation("GOSSIP from user: "+ _user.UserKey+", '"+this.templateNode.InnerText+"'");
+                    _logger.LogInformation("GOSSIP from user: "+ _user.UserKey+", '"+TemplateNode.InnerText+"'");
                 }
             }
             return string.Empty;

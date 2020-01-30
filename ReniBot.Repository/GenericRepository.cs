@@ -14,8 +14,8 @@ namespace ReniBot.Repository
 
         public GenericRepository(BotContext context)
         {
-            this._context = context ?? throw new ArgumentNullException(nameof(context));
-            this._dbSet = context.Set<TEntity>();
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _dbSet = context.Set<TEntity>();
         }
 
         public virtual IEnumerable<TEntity> GetItem(

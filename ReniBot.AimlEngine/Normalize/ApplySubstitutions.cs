@@ -40,7 +40,7 @@ namespace ReniBot.AimlEngine.Normalize
 
         protected override string ProcessChange()
         {
-            return ApplySubstitutions.Substitute(_substitutions, this.inputString);
+            return ApplySubstitutions.Substitute(_substitutions, InputString);
         }
 
         /// <summary>

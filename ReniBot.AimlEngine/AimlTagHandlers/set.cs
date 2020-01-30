@@ -48,23 +48,23 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "set")
+            if (TemplateNode.Name.ToLower() == "set")
             {
                 if (_config.GlobalSettings.Count > 0)
                 {
-                    if (this.templateNode.Attributes.Count == 1)
+                    if (TemplateNode.Attributes.Count == 1)
                     {
-                        if (this.templateNode.Attributes[0].Name.ToLower() == "name")
+                        if (TemplateNode.Attributes[0].Name.ToLower() == "name")
                         {
-                            if (this.templateNode.InnerText.Length > 0)
+                            if (TemplateNode.InnerText.Length > 0)
                             {
-                                _user.Predicates.addSetting(this.templateNode.Attributes[0].Value, this.templateNode.InnerText);
-                                return _user.Predicates.grabSetting(this.templateNode.Attributes[0].Value);
+                                _user.Predicates.addSetting(TemplateNode.Attributes[0].Value, TemplateNode.InnerText);
+                                return _user.Predicates.grabSetting(TemplateNode.Attributes[0].Value);
                             }
                             else
                             {
                                 // remove the predicate
-                                _user.Predicates.removeSetting(this.templateNode.Attributes[0].Value);
+                                _user.Predicates.removeSetting(TemplateNode.Attributes[0].Value);
                                 return string.Empty;
                             }
                         }

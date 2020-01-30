@@ -15,7 +15,7 @@ namespace ReniBot.AimlEngine.Normalize
      
         protected override string ProcessChange()
         {
-            return this.inputString.ToUpper();
+            return InputString.ToUpper();
         }
 
         /// <summary>

@@ -36,7 +36,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "date")
+            if (TemplateNode.Name.ToLower() == "date")
             {
                 return DateTime.Now.ToString(_local);
             }

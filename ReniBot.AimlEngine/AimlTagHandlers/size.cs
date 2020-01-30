@@ -33,7 +33,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "size")
+            if (TemplateNode.Name.ToLower() == "size")
             {
                 return Convert.ToString(_botSize);
             }

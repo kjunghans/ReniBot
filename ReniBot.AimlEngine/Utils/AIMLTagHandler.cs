@@ -24,8 +24,8 @@ namespace ReniBot.AimlEngine.Utils
                                     XmlNode templateNode) :base(templateNode.OuterXml)
         {
             Logger = logger;
-            this.templateNode = templateNode;
-            this.templateNode.Attributes.RemoveNamedItem("xmlns");
+            TemplateNode = templateNode;
+            TemplateNode.Attributes.RemoveNamedItem("xmlns");
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ReniBot.AimlEngine.Utils
          /// <summary>
         /// The template node to be processed by the class
         /// </summary>
-        public XmlNode templateNode;
+        public XmlNode TemplateNode;
 
 
         /// <summary>

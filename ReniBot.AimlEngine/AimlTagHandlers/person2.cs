@@ -63,22 +63,22 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "person2")
+            if (TemplateNode.Name.ToLower() == "person2")
             {
-                if (this.templateNode.InnerText.Length > 0)
+                if (TemplateNode.InnerText.Length > 0)
                 {
                     // non atomic version of the node
-                    return ReniBot.AimlEngine.Normalize.ApplySubstitutions.Substitute(_config.Person2Substitutions, templateNode.InnerText);
+                    return ReniBot.AimlEngine.Normalize.ApplySubstitutions.Substitute(_config.Person2Substitutions, TemplateNode.InnerText);
                 }
                 else
                 {
                     // atomic version of the node
                     XmlNode starNode = Utils.AIMLTagHandler.getNode("<star/>");
                     star recursiveStar = new star(_logger, _user, _query, _request, _result, starNode);
-                    this.templateNode.InnerText = recursiveStar.Transform();
-                    if (this.templateNode.InnerText.Length > 0)
+                    TemplateNode.InnerText = recursiveStar.Transform();
+                    if (TemplateNode.InnerText.Length > 0)
                     {
-                        return this.ProcessChange();
+                        return ProcessChange();
                     }
                     else
                     {

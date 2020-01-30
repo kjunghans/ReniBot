@@ -54,12 +54,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if(this.templateNode.Name.ToLower()=="sentence")
+            if(TemplateNode.Name.ToLower()=="sentence")
             {
-                if (this.templateNode.InnerText.Length > 0)
+                if (TemplateNode.InnerText.Length > 0)
                 {
                     StringBuilder result = new StringBuilder();
-                    char[] letters = this.templateNode.InnerText.Trim().ToCharArray();
+                    char[] letters = TemplateNode.InnerText.Trim().ToCharArray();
                     bool doChange = true;
                     for (int i = 0; i < letters.Length; i++)
                     {
@@ -95,10 +95,10 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                     // atomic version of the node
                     XmlNode starNode = Utils.AIMLTagHandler.getNode("<star/>");
                     star recursiveStar = new star(_logger, _user, _query, _request, _result, starNode);
-                    this.templateNode.InnerText = recursiveStar.Transform();
-                    if (this.templateNode.InnerText.Length > 0)
+                    TemplateNode.InnerText = recursiveStar.Transform();
+                    if (TemplateNode.InnerText.Length > 0)
                     {
-                        return this.ProcessChange();
+                        return ProcessChange();
                     }
                     else
                     {

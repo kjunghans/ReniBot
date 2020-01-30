@@ -43,14 +43,14 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "srai")
+            if (TemplateNode.Name.ToLower() == "srai")
             {
-                if (this.templateNode.InnerText.Length > 0)
+                if (TemplateNode.InnerText.Length > 0)
                 {
-                    Request subRequest = new Request(this.templateNode.InnerText, _user.UserId);
+                    Request subRequest = new Request(TemplateNode.InnerText, _user.UserId);
                     subRequest.StartedOn = _request.StartedOn; // make sure we don't keep adding time to the request
                     Result subQuery = _bot.Chat(subRequest);
-                    _request.hasTimedOut = subRequest.hasTimedOut;
+                    _request.HasTimedOut = subRequest.HasTimedOut;
                     return subQuery.Output;
                 }
             }

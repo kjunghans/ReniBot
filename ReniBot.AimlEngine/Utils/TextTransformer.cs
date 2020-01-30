@@ -16,24 +16,20 @@ namespace ReniBot.AimlEngine.Utils
         /// <summary>
         /// Instance of the input string
         /// </summary>
-        protected string inputString;
+        //protected string inputString;
 
 
         /// <summary>
         /// The input string to be transformed in some way
         /// </summary>
-        public string InputString
-        {
-            get{return this.inputString;}
-            set{this.inputString=value;}
-        }
-
+        public string InputString { get; set; }
+ 
         /// <summary>
         /// The transformed string
         /// </summary>
         public string OutputString
         {
-            get{return this.Transform();}
+            get{return Transform();}
         }
 
         /// <summary>
@@ -43,7 +39,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="inputString">The input string to be transformed</param>
         public TextTransformer(string inputString)
         {
-            this.inputString = inputString;
+            InputString = inputString;
         }
 
  
@@ -52,7 +48,7 @@ namespace ReniBot.AimlEngine.Utils
         /// </summary>
         public TextTransformer()
         {
-            this.inputString = string.Empty;
+            InputString = string.Empty;
         }
 
         /// <summary>
@@ -62,8 +58,8 @@ namespace ReniBot.AimlEngine.Utils
         /// <returns>The resulting output</returns>
         public string Transform(string input)
         {
-            this.inputString = input;
-            return this.Transform();
+            InputString = input;
+            return Transform();
         }
 
         /// <summary>
@@ -72,9 +68,10 @@ namespace ReniBot.AimlEngine.Utils
         /// <returns>The resulting transformed string</returns>
         public string Transform()
         {
-            if (this.inputString.Length > 0)
+           
+            if (InputString.Length > 0)
             {
-                return this.ProcessChange();
+                return ProcessChange();
             }
             else
             {

@@ -91,12 +91,12 @@ namespace ReniBot.AimlEngine
             {
                 // Normalize the input
                 ReniBot.AimlEngine.Normalize.SplitIntoSentences splitter = new ReniBot.AimlEngine.Normalize.SplitIntoSentences(_config);
-                string[] rawSentences = splitter.Transform(request.rawInput);
+                string[] rawSentences = splitter.Transform(request.RawInput);
                 foreach (string sentence in rawSentences)
                 {
                     result.InputSentences.Add(sentence);
-                    string topic = _botUserService.GetTopic(request.userId);
-                    string lastOutput = _userResultService.GetLastOutput(request.userId);
+                    string topic = _botUserService.GetTopic(request.UserId);
+                    string lastOutput = _userResultService.GetLastOutput(request.UserId);
                     string path = _loader.GeneratePath(sentence, lastOutput, topic, true);
                     result.NormalizedPaths.Add(path);
                 }
@@ -106,7 +106,7 @@ namespace ReniBot.AimlEngine
                 {
                     Utils.SubQuery query = new SubQuery(path);
                     query.Template = _graphmaster.evaluate(path, query, request, MatchState.UserInput, new StringBuilder(), _config.TimeOut);
-                    result.HasTimedOut = request.hasTimedOut;
+                    result.HasTimedOut = request.HasTimedOut;
                     result.SubQueries.Add(query);
                 }
 
@@ -118,7 +118,7 @@ namespace ReniBot.AimlEngine
                         try
                         {
                             XmlNode templateNode = AIMLTagHandler.getNode(query.Template);
-                            string outputSentence = processNode(templateNode, query, request, result, new User(_botUserService, _predicateService, _userResultService, _requestService) { UserId = request.userId });
+                            string outputSentence = processNode(templateNode, query, request, result, new User(_botUserService, _predicateService, _userResultService, _requestService) { UserId = request.UserId });
                             if (outputSentence.Length > 0)
                             {
                                 result.OutputSentences.Add(outputSentence);
@@ -130,7 +130,7 @@ namespace ReniBot.AimlEngine
                             {
                                 phoneHome(e.Message, request);
                             }
-                            _logger.LogWarning("A problem was encountered when trying to process the input: " + request.rawInput + " with the template: \"" + query.Template + "\"");
+                            _logger.LogWarning("A problem was encountered when trying to process the input: " + request.RawInput + " with the template: \"" + query.Template + "\"");
                         }
                     }
                 }
@@ -142,7 +142,7 @@ namespace ReniBot.AimlEngine
 
             // populate the Result object
             result.Duration = DateTime.Now - request.StartedOn;
-            _userResultService.Add(result.Duration.Milliseconds, result.HasTimedOut, result.RawOutput, result.requestId, result.UserId);
+            _userResultService.Add(result.Duration.Milliseconds, result.HasTimedOut, result.RawOutput, result.RequestId, result.UserId);
 
             return result;
         }
@@ -168,7 +168,7 @@ namespace ReniBot.AimlEngine
             if (request.StartedOn.AddMilliseconds(_config.TimeOut) < DateTime.Now)
             {
                 //_logger.LogWarning("Request timeout. User: " + request.user.UserKey + " raw input: \"" + request.rawInput + "\" processing template: \""+query.Template+"\"");
-                request.hasTimedOut = true;
+                request.HasTimedOut = true;
                 return string.Empty;
             }
                         
@@ -273,8 +273,8 @@ The ReniBot.AimlEngine program.
 ";
             message = message.Replace("*TIME*", DateTime.Now.ToString());
             message = message.Replace("*MESSAGE*", errorMessage);
-            message = message.Replace("*RAWINPUT*", request.rawInput);
-            message = message.Replace("*USER*", request.userId.ToString());
+            message = message.Replace("*RAWINPUT*", request.RawInput);
+            message = message.Replace("*USER*", request.UserId.ToString());
             StringBuilder paths = new StringBuilder();
             //foreach(string path in request.result.NormalizedPaths)
             //{

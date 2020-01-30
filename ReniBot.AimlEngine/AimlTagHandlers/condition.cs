@@ -109,37 +109,37 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                         XmlNode templateNode)
             : base(logger, templateNode)
         {
-            this.isRecursive = false;
+            isRecursive = false;
             _user = user;
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "condition")
+            if (TemplateNode.Name.ToLower() == "condition")
             {
                 // heuristically work out the type of condition being processed
 
-                if (this.templateNode.Attributes.Count == 2) // block
+                if (TemplateNode.Attributes.Count == 2) // block
                 {
                     string name = "";
                     string value = "";
 
-                    if (this.templateNode.Attributes[0].Name == "name")
+                    if (TemplateNode.Attributes[0].Name == "name")
                     {
-                        name = this.templateNode.Attributes[0].Value;
+                        name = TemplateNode.Attributes[0].Value;
                     }
-                    else if (this.templateNode.Attributes[0].Name == "value")
+                    else if (TemplateNode.Attributes[0].Name == "value")
                     {
-                        value = this.templateNode.Attributes[0].Value;
+                        value = TemplateNode.Attributes[0].Value;
                     }
 
-                    if (this.templateNode.Attributes[1].Name == "name")
+                    if (TemplateNode.Attributes[1].Name == "name")
                     {
-                        name = this.templateNode.Attributes[1].Value;
+                        name = TemplateNode.Attributes[1].Value;
                     }
-                    else if (this.templateNode.Attributes[1].Name == "value")
+                    else if (TemplateNode.Attributes[1].Name == "value")
                     {
-                        value = this.templateNode.Attributes[1].Value;
+                        value = TemplateNode.Attributes[1].Value;
                     }
 
                     if ((name.Length > 0) & (value.Length > 0))
@@ -148,16 +148,16 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                         Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
                         if (matcher.IsMatch(actualValue))
                         {
-                            return this.templateNode.InnerXml;
+                            return TemplateNode.InnerXml;
                         }
                     }
                 }
-                else if (this.templateNode.Attributes.Count == 1) // single predicate
+                else if (TemplateNode.Attributes.Count == 1) // single predicate
                 {
-                    if (this.templateNode.Attributes[0].Name == "name")
+                    if (TemplateNode.Attributes[0].Name == "name")
                     {
-                        string name = this.templateNode.Attributes[0].Value;
-                        foreach (XmlNode childLINode in this.templateNode.ChildNodes)
+                        string name = TemplateNode.Attributes[0].Value;
+                        foreach (XmlNode childLINode in TemplateNode.ChildNodes)
                         {
                             if (childLINode.Name.ToLower() == "li")
                             {
@@ -181,9 +181,9 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                         }
                     }
                 }
-                else if (this.templateNode.Attributes.Count == 0) // multi-predicate
+                else if (TemplateNode.Attributes.Count == 0) // multi-predicate
                 {
-                    foreach (XmlNode childLINode in this.templateNode.ChildNodes)
+                    foreach (XmlNode childLINode in TemplateNode.ChildNodes)
                     {
                         if (childLINode.Name.ToLower() == "li")
                         {

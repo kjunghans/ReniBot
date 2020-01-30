@@ -33,12 +33,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "formal")
+            if (TemplateNode.Name.ToLower() == "formal")
             {
                 StringBuilder result = new StringBuilder();
-                if (this.templateNode.InnerText.Length > 0)
+                if (TemplateNode.InnerText.Length > 0)
                 {
-                    string[] words = this.templateNode.InnerText.ToLower().Split();
+                    string[] words = TemplateNode.InnerText.ToLower().Split();
                     foreach (string word in words)
                     {
                         string newWord = word.Substring(0, 1);

@@ -13,7 +13,7 @@ namespace ReniBot.AimlEngine
         /// <summary>
         /// The request from the user
         /// </summary>
-        public int requestId { get; set; }
+        public int RequestId { get; set; }
 
         /// <summary>
         /// The raw input from the user
@@ -43,30 +43,30 @@ namespace ReniBot.AimlEngine
             {
                 if (OutputSentences.Count > 0)
                 {
-                    return this.RawOutput;
+                    return RawOutput;
                 }
                 else
                 {
-                    if (request.hasTimedOut)
+                    if (_request.HasTimedOut)
                     {
                         return "Timed out waiting for a response."; //TODO: Make this message configurable?
                     }
                     else
                     {
                         StringBuilder paths = new StringBuilder();
-                        foreach (string pattern in this.NormalizedPaths)
+                        foreach (string pattern in NormalizedPaths)
                         {
                             paths.Append(pattern + Environment.NewLine);
                         }
                         //TODO: Need a more versital logging method that is not coupled with the bot.
-                        //this.bot.writeToLog("The bot could not find any response for the input: " + this.RawInput + " with the path(s): " + Environment.NewLine + paths.ToString() + " from the user with an id: " + this.user.UserKey);
+                        //bot.writeToLog("The bot could not find any response for the input: " + RawInput + " with the path(s): " + Environment.NewLine + paths.ToString() + " from the user with an id: " + user.UserKey);
                         return string.Empty;
                     }
                 }
             }
         }
 
-        public Request request { get; set; }
+        private readonly Request _request;
 
         /// <summary>
         /// Returns the raw sentences without any logging 
@@ -79,7 +79,7 @@ namespace ReniBot.AimlEngine
                 foreach (string sentence in OutputSentences)
                 {
                     string sentenceForOutput = sentence.Trim();
-                    if (!this.checkEndsAsSentence(sentenceForOutput))
+                    if (!checkEndsAsSentence(sentenceForOutput))
                     {
                         sentenceForOutput += ".";
                     }
@@ -118,10 +118,10 @@ namespace ReniBot.AimlEngine
         /// <param name="request">The request that originated this result</param>
         public Result(Request request)
         {
-            _userId = request.userId;
-            this.requestId = request.id;
-            this.RawInput = request.rawInput;
-            this.request = request;
+            _userId = request.UserId;
+            RequestId = request.Id;
+            RawInput = request.RawInput;
+            _request = request;
         }
 
         private void SetOutputSentences(string rawOutput)
@@ -133,13 +133,13 @@ namespace ReniBot.AimlEngine
 
         public Result(Request request, string rawOutput, TimeSpan duration, bool hasTimedOut)
         {
-            _userId = request.userId;
-            this.requestId = request.id;
-            this.RawInput = request.rawInput;
-            this.request = request;
+            _userId = request.UserId;
+            RequestId = request.Id;
+            RawInput = request.RawInput;
+            _request = request;
             SetOutputSentences(rawOutput);
-            this.Duration = duration;
-            this.HasTimedOut = hasTimedOut;
+            Duration = duration;
+            HasTimedOut = hasTimedOut;
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace ReniBot.AimlEngine
         /// <returns>The raw output from the bot</returns>
         public override string ToString()
         {
-            return this.Output;
+            return Output;
         }
 
         /// <summary>

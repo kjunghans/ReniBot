@@ -32,7 +32,7 @@ namespace ReniBot.AimlEngine.Utils
         {
             get
             {
-                return this.orderedKeys.Count;
+                return orderedKeys.Count;
             }
         }
 
@@ -48,13 +48,13 @@ namespace ReniBot.AimlEngine.Utils
                 result.AppendChild(dec);
                 XmlNode root = result.CreateNode(XmlNodeType.Element, "root", "");
                 result.AppendChild(root);
-                foreach (string key in this.orderedKeys)
+                foreach (string key in orderedKeys)
                 {
                     XmlNode item = result.CreateNode(XmlNodeType.Element, "item", "");
                     XmlAttribute name = result.CreateAttribute("name");
                     name.Value = key;
                     XmlAttribute value = result.CreateAttribute( "value");
-                    value.Value = (string)this.settingsHash[key];
+                    value.Value = (string)settingsHash[key];
                     item.Attributes.Append(name);
                     item.Attributes.Append(value);
                     root.AppendChild(item);
@@ -94,7 +94,7 @@ namespace ReniBot.AimlEngine.Utils
                 {
                     XmlDocument xmlDoc = new XmlDocument();
                     xmlDoc.Load(pathToSettings);
-                    this.loadSettings(xmlDoc);
+                    loadSettings(xmlDoc);
                 }
                 else
                 {
@@ -122,7 +122,7 @@ namespace ReniBot.AimlEngine.Utils
         public void loadSettings(XmlDocument settingsAsXML)
         {
             // empty the hash
-            this.clearSettings();
+            clearSettings();
 
             XmlNodeList rootChildren = settingsAsXML.DocumentElement.ChildNodes;
 
@@ -136,7 +136,7 @@ namespace ReniBot.AimlEngine.Utils
                         string value = myNode.Attributes["value"].Value;
                         if (name.Length > 0)
                         {
-                            this.addSetting(name, value);
+                            addSetting(name, value);
                         }
                     }
                 }
@@ -154,9 +154,9 @@ namespace ReniBot.AimlEngine.Utils
             string key = MakeCaseInsensitive.TransformInput(name);
             if (key.Length > 0)
             {
-                this.removeSetting(key);
-                this.orderedKeys.Add(key);
-                this.settingsHash.Add(MakeCaseInsensitive.TransformInput(key), value);
+                removeSetting(key);
+                orderedKeys.Add(key);
+                settingsHash.Add(MakeCaseInsensitive.TransformInput(key), value);
             }
         }
 
@@ -167,8 +167,8 @@ namespace ReniBot.AimlEngine.Utils
         public void removeSetting(string name)
         {
             string normalizedName = MakeCaseInsensitive.TransformInput(name);
-            this.orderedKeys.Remove(normalizedName);
-            this.removeFromHash(normalizedName);
+            orderedKeys.Remove(normalizedName);
+            removeFromHash(normalizedName);
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace ReniBot.AimlEngine.Utils
         private void removeFromHash(string name)
         {
             string normalizedName = MakeCaseInsensitive.TransformInput(name);
-            this.settingsHash.Remove(normalizedName);
+            settingsHash.Remove(normalizedName);
         }
 
         /// <summary>
@@ -190,10 +190,10 @@ namespace ReniBot.AimlEngine.Utils
         public void updateSetting(string name, string value)
         {
             string key = MakeCaseInsensitive.TransformInput(name);
-            if (this.orderedKeys.Contains(key))
+            if (orderedKeys.Contains(key))
             {
-                this.removeFromHash(key);
-                this.settingsHash.Add(MakeCaseInsensitive.TransformInput(key), value);
+                removeFromHash(key);
+                settingsHash.Add(MakeCaseInsensitive.TransformInput(key), value);
             }
         }
 
@@ -202,8 +202,8 @@ namespace ReniBot.AimlEngine.Utils
         /// </summary>
         public void clearSettings()
         {
-            this.orderedKeys.Clear();
-            this.settingsHash.Clear();
+            orderedKeys.Clear();
+            settingsHash.Clear();
         }
 
         /// <summary>
@@ -214,9 +214,9 @@ namespace ReniBot.AimlEngine.Utils
         public string grabSetting(string name)
         {
             string normalizedName = MakeCaseInsensitive.TransformInput(name);
-            if (this.containsSettingCalled(normalizedName))
+            if (containsSettingCalled(normalizedName))
             {
-                return (string)this.settingsHash[normalizedName];
+                return (string)settingsHash[normalizedName];
             }
             else
             {
@@ -234,7 +234,7 @@ namespace ReniBot.AimlEngine.Utils
             string normalizedName = MakeCaseInsensitive.TransformInput(name);
             if (normalizedName.Length > 0)
             {
-                return this.orderedKeys.Contains(normalizedName);
+                return orderedKeys.Contains(normalizedName);
             }
             else
             {
@@ -250,8 +250,8 @@ namespace ReniBot.AimlEngine.Utils
         {
             get
             {
-                string[] result = new string[this.orderedKeys.Count];
-                this.orderedKeys.CopyTo(result, 0);
+                string[] result = new string[orderedKeys.Count];
+                orderedKeys.CopyTo(result, 0);
                 return result;
             }
         }
@@ -262,9 +262,9 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="target">The target to recieve the values from this SettingsDictionary</param>
         public void Clone(SettingsDictionary target)
         {
-            foreach (string key in this.orderedKeys)
+            foreach (string key in orderedKeys)
             {
-                target.addSetting(key, this.grabSetting(key));
+                target.addSetting(key, grabSetting(key));
             }
         }
         #endregion

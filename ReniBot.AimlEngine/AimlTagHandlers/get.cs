@@ -49,15 +49,15 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "get")
+            if (TemplateNode.Name.ToLower() == "get")
             {
                 if (_config.GlobalSettings.Count > 0)
                 {
-                    if (this.templateNode.Attributes.Count == 1)
+                    if (TemplateNode.Attributes.Count == 1)
                     {
-                        if (this.templateNode.Attributes[0].Name.ToLower() == "name")
+                        if (TemplateNode.Attributes[0].Name.ToLower() == "name")
                         {
-                            return _user.Predicates.grabSetting(this.templateNode.Attributes[0].Value);
+                            return _user.Predicates.grabSetting(TemplateNode.Attributes[0].Value);
                         }
                     }
                 }

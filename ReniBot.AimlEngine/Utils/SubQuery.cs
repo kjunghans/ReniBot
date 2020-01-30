@@ -45,7 +45,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="fullPath">The path that this query relates to</param>
         public SubQuery(string fullPath)
         {
-            this.FullPath = fullPath;
+            FullPath = fullPath;
         }
     }
 }

@@ -50,22 +50,22 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "star")
+            if (TemplateNode.Name.ToLower() == "star")
             {
                 if (_query.InputStar.Count > 0)
                 {
-                    if (this.templateNode.Attributes.Count == 0)
+                    if (TemplateNode.Attributes.Count == 0)
                     {
                         // return the first (latest) star in the List<>
                         return (string)_query.InputStar[0];
                     }
-                    else if (this.templateNode.Attributes.Count == 1)
+                    else if (TemplateNode.Attributes.Count == 1)
                     {
-                        if (this.templateNode.Attributes[0].Name.ToLower() == "index")
+                        if (TemplateNode.Attributes[0].Name.ToLower() == "index")
                         {
                             try
                             {
-                                int index = Convert.ToInt32(templateNode.Attributes[0].Value);
+                                int index = Convert.ToInt32(TemplateNode.Attributes[0].Value);
                                 index--;
                                 if ((index >= 0) & (index < _query.InputStar.Count))
                                 {
@@ -73,19 +73,19 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                 }
                                 else
                                 {
-                                    _logger.LogWarning("InputStar out of bounds reference caused by input: " + _request.rawInput);
+                                    _logger.LogWarning("InputStar out of bounds reference caused by input: " + _request.RawInput);
                                 }
                             }
                             catch
                             {
-                                _logger.LogWarning("Index set to non-integer value whilst processing star tag in response to the input: " + _request.rawInput);
+                                _logger.LogWarning("Index set to non-integer value whilst processing star tag in response to the input: " + _request.RawInput);
                             }
                         }
                     }
                 }
                 else
                 {
-                    _logger.LogWarning("A star tag tried to reference an empty InputStar collection when processing the input: "+ _request.rawInput);
+                    _logger.LogWarning("A star tag tried to reference an empty InputStar collection when processing the input: "+ _request.RawInput);
                 }
             }
             return string.Empty;

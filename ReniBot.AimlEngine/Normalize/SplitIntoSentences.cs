@@ -18,18 +18,18 @@ namespace ReniBot.AimlEngine.Normalize
         /// <summary>
         /// The raw input string
         /// </summary>
-        private string inputString;
+        //private string inputString;
 
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="bot">The bot this sentence splitter is associated with</param>
         /// <param name="inputString">The raw input string to be processed</param>
-        public SplitIntoSentences(BotConfiguration config, string inputString)
-        {
-            _config = config;
-            inputString = inputString;
-        }
+        //public SplitIntoSentences(BotConfiguration config, string inputString)
+        //{
+        //    _config = config;
+        //    inputString = inputString;
+        //}
 
         /// <summary>
         /// Ctor
@@ -46,21 +46,21 @@ namespace ReniBot.AimlEngine.Normalize
         /// </summary>
         /// <param name="inputString">The raw input to split</param>
         /// <returns>An array of strings representing the constituent "sentences"</returns>
-        public string[] Transform(string inputString)
-        {
-            this.inputString = inputString;
-            return this.Transform();
-        }
+        //public string[] Transform(string inputString)
+        //{
+        //    inputString = inputString;
+        //    return Transform();
+        //}
 
         /// <summary>
         /// Splits the raw input supplied via the ctor into an array of strings according to the tokens
         /// found in the bot's Splitters List<>
         /// </summary>
         /// <returns>An array of strings representing the constituent "sentences"</returns>
-        public string[] Transform()
+        public string[] Transform(string inputString)
         {
             string[] tokens = (string[])_config.Splitters.ToArray();
-            string[] rawResult = this.inputString.Split(tokens, System.StringSplitOptions.RemoveEmptyEntries);
+            string[] rawResult = inputString.Split(tokens, System.StringSplitOptions.RemoveEmptyEntries);
             List<string> tidyResult = new List<string>();
             foreach (string rawSentence in rawResult)
             {

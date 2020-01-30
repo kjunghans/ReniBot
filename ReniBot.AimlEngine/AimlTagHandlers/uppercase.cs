@@ -36,9 +36,9 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "uppercase")
+            if (TemplateNode.Name.ToLower() == "uppercase")
             {
-                return this.templateNode.InnerText.ToUpper(_locale);
+                return TemplateNode.InnerText.ToUpper(_locale);
             }
             return string.Empty;
         }

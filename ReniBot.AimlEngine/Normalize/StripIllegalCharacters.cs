@@ -24,7 +24,7 @@ namespace ReniBot.AimlEngine.Normalize
 
         protected override string ProcessChange()
         {
-            return _strippers.Replace(this.inputString, " ");
+            return _strippers.Replace(InputString, " ");
         }
     }
 }

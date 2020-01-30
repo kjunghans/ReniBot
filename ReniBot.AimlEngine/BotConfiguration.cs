@@ -70,7 +70,7 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                return Convert.ToInt32(this.GlobalSettings.grabSetting("maxlogbuffersize"));
+                return Convert.ToInt32(GlobalSettings.grabSetting("maxlogbuffersize"));
             }
         }
 
@@ -86,7 +86,7 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                return this.GlobalSettings.grabSetting("notacceptinguserinputmessage");
+                return GlobalSettings.grabSetting("notacceptinguserinputmessage");
             }
         }
 
@@ -97,7 +97,7 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                return Convert.ToDouble(this.GlobalSettings.grabSetting("timeout"));
+                return Convert.ToDouble(GlobalSettings.grabSetting("timeout"));
             }
         }
 
@@ -108,7 +108,7 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                return this.GlobalSettings.grabSetting("timeoutmessage");
+                return GlobalSettings.grabSetting("timeoutmessage");
             }
         }
 
@@ -119,7 +119,7 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                return new CultureInfo(this.GlobalSettings.grabSetting("culture"));
+                return new CultureInfo(GlobalSettings.grabSetting("culture"));
             }
         }
 
@@ -130,7 +130,7 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                return new Regex(this.GlobalSettings.grabSetting("stripperregex"), RegexOptions.IgnorePatternWhitespace);
+                return new Regex(GlobalSettings.grabSetting("stripperregex"), RegexOptions.IgnorePatternWhitespace);
             }
         }
 
@@ -141,7 +141,7 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                return this.GlobalSettings.grabSetting("adminemail");
+                return GlobalSettings.grabSetting("adminemail");
             }
             set
             {
@@ -158,7 +158,7 @@ namespace ReniBot.AimlEngine
                     if (reStrict.IsMatch(value))
                     {
                         // update the settings
-                        this.GlobalSettings.addSetting("adminemail", value);
+                        GlobalSettings.addSetting("adminemail", value);
                     }
                     else
                     {
@@ -167,7 +167,7 @@ namespace ReniBot.AimlEngine
                 }
                 else
                 {
-                    this.GlobalSettings.addSetting("adminemail", "");
+                    GlobalSettings.addSetting("adminemail", "");
                 }
             }
         }
@@ -179,7 +179,7 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                string islogging = this.GlobalSettings.grabSetting("islogging");
+                string islogging = GlobalSettings.grabSetting("islogging");
                 if (islogging.ToLower() == "true")
                 {
                     return true;
@@ -199,7 +199,7 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                string willcallhome = this.GlobalSettings.grabSetting("willcallhome");
+                string willcallhome = GlobalSettings.grabSetting("willcallhome");
                 if (willcallhome.ToLower() == "true")
                 {
                     return true;
@@ -223,7 +223,7 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                int sex = Convert.ToInt32(this.GlobalSettings.grabSetting("gender"));
+                int sex = Convert.ToInt32(GlobalSettings.grabSetting("gender"));
                 var result = sex switch
                 {
                     -1 => Gender.Unknown,
@@ -242,8 +242,8 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                //return Path.Combine(Environment.CurrentDirectory, this.GlobalSettings.grabSetting("aimldirectory"));
-                return this.GlobalSettings.grabSetting("aimldirectory");
+                //return Path.Combine(Environment.CurrentDirectory, GlobalSettings.grabSetting("aimldirectory"));
+                return GlobalSettings.grabSetting("aimldirectory");
             }
         }
 
@@ -254,8 +254,8 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                //return Path.Combine(Environment.CurrentDirectory, this.GlobalSettings.grabSetting("configdirectory"));
-                return this.GlobalSettings.grabSetting("configdirectory");
+                //return Path.Combine(Environment.CurrentDirectory, GlobalSettings.grabSetting("configdirectory"));
+                return GlobalSettings.grabSetting("configdirectory");
             }
         }
 
@@ -266,8 +266,8 @@ namespace ReniBot.AimlEngine
         {
             get
             {
-                //return Path.Combine(Environment.CurrentDirectory, this.GlobalSettings.grabSetting("logdirectory"));
-                return this.GlobalSettings.grabSetting("logdirectory");
+                //return Path.Combine(Environment.CurrentDirectory, GlobalSettings.grabSetting("logdirectory"));
+                return GlobalSettings.grabSetting("logdirectory");
             }
         }
 

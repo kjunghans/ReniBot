@@ -9,13 +9,12 @@ namespace ReniBot.AimlEngine
     /// </summary>
     public class Request
     {
-        #region Attributes
 
-        public int id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// The raw input from the user
         /// </summary>
-        public string rawInput { get; set; }
+        public string RawInput { get; set; }
 
         /// <summary>
         /// The time at which this request was created within the system
@@ -25,25 +24,23 @@ namespace ReniBot.AimlEngine
         /// <summary>
         /// The user who made this request
         /// </summary>
-        public int userId {get; set;}
+        public int UserId {get; set;}
 
 
         /// <summary>
         /// The final result produced by this request
         /// </summary>
-        public int? resultId { get; set; }
+        public int? ResultId { get; set; }
 
         /// <summary>
         /// Flag to show that the request has timed out
         /// </summary>
-        public bool hasTimedOut { get; set; }
-
-        #endregion
+        public bool HasTimedOut { get; set; }
 
 
         public Request()
         {
-            hasTimedOut = false;
+            HasTimedOut = false;
         }
 
         /// <summary>
@@ -54,10 +51,10 @@ namespace ReniBot.AimlEngine
         /// <param name="bot">The bot to which this is a request</param>
         public Request(string rawInput, int userId)
         {
-            hasTimedOut = false;
-            this.rawInput = rawInput;
-            this.userId = userId;
-            this.StartedOn = DateTimeOffset.UtcNow;
+            HasTimedOut = false;
+            RawInput = rawInput;
+            UserId = userId;
+            StartedOn = DateTimeOffset.UtcNow;
         }
     }
 }

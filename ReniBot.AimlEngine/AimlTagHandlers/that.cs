@@ -51,22 +51,22 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "that")
+            if (TemplateNode.Name.ToLower() == "that")
             {
-                if (this.templateNode.Attributes.Count == 0)
+                if (TemplateNode.Attributes.Count == 0)
                 {
                     return _user.getThat();
                 }
-                else if (this.templateNode.Attributes.Count == 1)
+                else if (TemplateNode.Attributes.Count == 1)
                 {
-                    if (this.templateNode.Attributes[0].Name.ToLower() == "index")
+                    if (TemplateNode.Attributes[0].Name.ToLower() == "index")
                     {
-                        if (this.templateNode.Attributes[0].Value.Length > 0)
+                        if (TemplateNode.Attributes[0].Value.Length > 0)
                         {
                             try
                             {
                                 // see if there is a split
-                                string[] dimensions = this.templateNode.Attributes[0].Value.Split(",".ToCharArray());
+                                string[] dimensions = TemplateNode.Attributes[0].Value.Split(",".ToCharArray());
                                 if (dimensions.Length == 2)
                                 {
                                     int result = Convert.ToInt32(dimensions[0].Trim());
@@ -77,25 +77,25 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                     }
                                     else
                                     {
-                                        _logger.LogError("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.rawInput);
+                                        _logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
                                     }
                                 }
                                 else
                                 {
-                                    int result = Convert.ToInt32(this.templateNode.Attributes[0].Value.Trim());
+                                    int result = Convert.ToInt32(TemplateNode.Attributes[0].Value.Trim());
                                     if (result > 0)
                                     {
                                         return _user.getThat(result - 1);
                                     }
                                     else
                                     {
-                                        _logger.LogError("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.rawInput);
+                                        _logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
                                     }
                                 }
                             }
                             catch
                             {
-                                _logger.LogError("ERROR! An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.rawInput);
+                                _logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
                             }
                         }
                     }

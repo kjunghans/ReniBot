@@ -35,7 +35,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "id")
+            if (TemplateNode.Name.ToLower() == "id")
             {
                 return _user.UserKey;
             }

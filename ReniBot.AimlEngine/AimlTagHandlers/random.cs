@@ -25,18 +25,18 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                          XmlNode templateNode)
             : base(logger, templateNode)
         {
-            this.isRecursive = false;
+            isRecursive = false;
         }
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "random")
+            if (TemplateNode.Name.ToLower() == "random")
             {
-                if (this.templateNode.HasChildNodes)
+                if (TemplateNode.HasChildNodes)
                 {
                     // only grab <li> nodes
                     List<XmlNode> listNodes = new List<XmlNode>();
-                    foreach (XmlNode childNode in this.templateNode.ChildNodes)
+                    foreach (XmlNode childNode in TemplateNode.ChildNodes)
                     {
                         if (childNode.Name == "li")
                         {

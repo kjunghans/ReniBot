@@ -30,11 +30,11 @@ namespace ReniBot.AimlEngine.Utils
         {
             Request output = new Request()
             {
-                userId = input.userId,
-                hasTimedOut = false,
-                rawInput = input.rawInput,
+                UserId = input.userId,
+                HasTimedOut = false,
+                RawInput = input.rawInput,
                 StartedOn = input.startedOn,
-                id = input.id
+                Id = input.id
             };
             return output;
         }

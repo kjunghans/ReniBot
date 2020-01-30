@@ -32,11 +32,11 @@ namespace ReniBot.AimlEngine.Utils
         /// <returns>The instantiated class</returns>
         public AIMLTagHandler Instantiate(Dictionary<string, Assembly> Assemblies)
         {
-            if (Assemblies.ContainsKey(this.AssemblyName))
+            if (Assemblies.ContainsKey(AssemblyName))
             {
-                Assembly tagDLL = (Assembly)Assemblies[this.AssemblyName]; 
+                Assembly tagDLL = (Assembly)Assemblies[AssemblyName]; 
                 Type[] tagDLLTypes = tagDLL.GetTypes();
-                return (AIMLTagHandler)tagDLL.CreateInstance(this.ClassName);
+                return (AIMLTagHandler)tagDLL.CreateInstance(ClassName);
             }
             else
             {

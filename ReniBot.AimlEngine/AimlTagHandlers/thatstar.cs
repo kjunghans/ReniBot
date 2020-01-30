@@ -45,9 +45,9 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "thatstar")
+            if (TemplateNode.Name.ToLower() == "thatstar")
             {
-                if (this.templateNode.Attributes.Count == 0)
+                if (TemplateNode.Attributes.Count == 0)
                 {
                     if (_query.ThatStar.Count > 0)
                     {
@@ -55,18 +55,18 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                     }
                     else
                     {
-                        Logger.LogError("ERROR! An out of bounds index to thatstar was encountered when processing the input: " + _request.rawInput);
+                        Logger.LogError("ERROR! An out of bounds index to thatstar was encountered when processing the input: " + _request.RawInput);
                     }
                 }
-                else if (this.templateNode.Attributes.Count == 1)
+                else if (TemplateNode.Attributes.Count == 1)
                 {
-                    if (this.templateNode.Attributes[0].Name.ToLower() == "index")
+                    if (TemplateNode.Attributes[0].Name.ToLower() == "index")
                     {
-                        if (this.templateNode.Attributes[0].Value.Length > 0)
+                        if (TemplateNode.Attributes[0].Value.Length > 0)
                         {
                             try
                             {
-                                int result = Convert.ToInt32(this.templateNode.Attributes[0].Value.Trim());
+                                int result = Convert.ToInt32(TemplateNode.Attributes[0].Value.Trim());
                                 if (_query.ThatStar.Count > 0)
                                 {
                                     if (result > 0)
@@ -75,17 +75,17 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                     }
                                     else
                                     {
-                                        Logger.LogError("An input tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.rawInput);
+                                        Logger.LogError("An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
                                     }
                                 }
                                 else
                                 {
-                                    Logger.LogError("ERROR! An out of bounds index to thatstar was encountered when processing the input: " + _request.rawInput);
+                                    Logger.LogError("ERROR! An out of bounds index to thatstar was encountered when processing the input: " + _request.RawInput);
                                 }
                             }
                             catch
                             {
-                                Logger.LogError("ERROR! A thatstar tag with a bady formed index (" + this.templateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.rawInput);
+                                Logger.LogError("ERROR! A thatstar tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
                             }
                         }
                     }

@@ -33,7 +33,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
         protected override string ProcessChange()
         {
-            if (this.templateNode.Name.ToLower() == "version")
+            if (TemplateNode.Name.ToLower() == "version")
             {
                 return _config.GlobalSettings.grabSetting("version");
             }

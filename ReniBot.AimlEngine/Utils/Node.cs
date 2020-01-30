@@ -11,7 +11,6 @@ namespace ReniBot.AimlEngine.Utils
     [Serializable]
     public class Node
     {
-        #region Attributes
 
         /// <summary>
         /// Contains the child nodes of this node
@@ -25,30 +24,24 @@ namespace ReniBot.AimlEngine.Utils
         {
             get
             {
-                return this.children.Count;
+                return children.Count;
             }
         }
 
         /// <summary>
         /// The template (if any) associated with this node
         /// </summary>
-        public string template = string.Empty;
+        public string Template = string.Empty;
 
         /// <summary>
         /// The AIML source for the category that defines the template
         /// </summary>
-        public string filename = string.Empty;
+        public string Filename = string.Empty;
 
         /// <summary>
         /// The word that identifies this node to it's parent node
         /// </summary>
         public string word=string.Empty;
-
-        #endregion
-
-        #region Methods
-
-        #region Add category
 
         /// <summary>
         /// Adds a category to the node
@@ -66,8 +59,8 @@ namespace ReniBot.AimlEngine.Utils
             // check we're not at the leaf node
             if (path.Trim().Length == 0)
             {
-                this.template = template;
-                this.filename = filename;
+                Template = template;
+                Filename = filename;
                 return;
             }
 
@@ -87,9 +80,9 @@ namespace ReniBot.AimlEngine.Utils
             // o.k. check we don't already have a child with the key from this sentence
             // if we do then pass the handling of this sentence down the branch to the 
             // child nodemapper otherwise the child nodemapper doesn't yet exist, so create a new one
-            if (this.children.ContainsKey(firstWord))
+            if (children.ContainsKey(firstWord))
             {
-                Node childNode = this.children[firstWord];
+                Node childNode = children[firstWord];
                 childNode.addCategory(newPath, template, filename);
             }
             else
@@ -97,13 +90,10 @@ namespace ReniBot.AimlEngine.Utils
                 Node childNode = new Node();
                 childNode.word = firstWord;
                 childNode.addCategory(newPath, template, filename);
-                this.children.Add(childNode.word, childNode);
+                children.Add(childNode.word, childNode);
             }
         }
 
-        #endregion
-
-        #region Evaluate Node
 
         /// <summary>
         /// Navigates this node (and recusively into child nodes) for a match to the path passed as an argument
@@ -122,7 +112,7 @@ namespace ReniBot.AimlEngine.Utils
             {
                 //Todo: add logging
                 //request.bot.writeToLog("WARNING! Request timeout. User: " + request.user.UserKey + " raw input: \"" + request.rawInput + "\"");
-                request.hasTimedOut = true;
+                request.HasTimedOut = true;
                 return string.Empty;
             }
 
@@ -131,22 +121,22 @@ namespace ReniBot.AimlEngine.Utils
 
             // check if this is the end of a branch in the GraphMaster 
             // return the cCategory for this node
-            if (this.children.Count==0)
+            if (children.Count==0)
             {
                 if (path.Length > 0)
                 {
                     // if we get here it means that there is a wildcard in the user input part of the
                     // path.
-                    this.storeWildCard(path, wildcard);
+                    storeWildCard(path, wildcard);
                 }
-                return this.template;
+                return Template;
             }
 
             // if we've matched all the words in the input sentence and this is the end
             // of the line then return the cCategory for this node
             if (path.Length == 0)
             {
-                return this.template;
+                return Template;
             }
 
             // otherwise split the input into it's component words
@@ -160,13 +150,13 @@ namespace ReniBot.AimlEngine.Utils
 
             // first option is to see if this node has a child denoted by the "_" 
             // wildcard. "_" comes first in precedence in the AIML alphabet
-            if (this.children.ContainsKey("_"))
+            if (children.ContainsKey("_"))
             {
-                Node childNode = (Node)this.children["_"];
+                Node childNode = (Node)children["_"];
 
                 // add the next word to the wildcard match 
                 StringBuilder newWildcard = new StringBuilder();
-                this.storeWildCard(splitPath[0],newWildcard);
+                storeWildCard(splitPath[0],newWildcard);
                 
                 // move down into the identified branch of the GraphMaster structure
                 string result = childNode.evaluate(newPath, query, request, matchstate, newWildcard, timeOut);
@@ -200,7 +190,7 @@ namespace ReniBot.AimlEngine.Utils
             // second option - the nodemapper may have contained a "_" child, but led to no match
             // or it didn't contain a "_" child at all. So get the child nodemapper from this 
             // nodemapper that matches the first word of the input sentence.
-            if (this.children.ContainsKey(firstWord))
+            if (children.ContainsKey(firstWord))
             {
                 // process the matchstate - this might not make sense but the matchstate is working
                 // with a "backwards" path: "topic <topic> that <that> user input"
@@ -216,7 +206,7 @@ namespace ReniBot.AimlEngine.Utils
                     newMatchstate = MatchState.Topic;
                 }
 
-                Node childNode = (Node)this.children[firstWord];
+                Node childNode = (Node)children[firstWord];
                 // move down into the identified branch of the GraphMaster structure using the new
                 // matchstate
                 StringBuilder newWildcard = new StringBuilder();
@@ -251,14 +241,14 @@ namespace ReniBot.AimlEngine.Utils
             // third option - the input part of the path might have been matched so far but hasn't
             // returned a match, so check to see it contains the "*" wildcard. "*" comes last in
             // precedence in the AIML alphabet.
-            if (this.children.ContainsKey("*"))
+            if (children.ContainsKey("*"))
             {
                 // o.k. look for the path in the child node denoted by "*"
-                Node childNode = (Node)this.children["*"];
+                Node childNode = (Node)children["*"];
 
                 // add the next word to the wildcard match 
                 StringBuilder newWildcard = new StringBuilder();
-                this.storeWildCard(splitPath[0], newWildcard);
+                storeWildCard(splitPath[0], newWildcard);
 
                 string result = childNode.evaluate(newPath, query, request, matchstate, newWildcard, timeOut);
                 // and if we get a result from the branch process and return it
@@ -290,10 +280,10 @@ namespace ReniBot.AimlEngine.Utils
             // a "_", the sFirstWord text, or "*" as a means of denoting a child node. However, 
             // if this node is itself representing a wildcard then the search continues to be
             // valid if we proceed with the tail.
-            if ((this.word == "_") || (this.word == "*"))
+            if ((word == "_") || (word == "*"))
             {
-                this.storeWildCard(splitPath[0], wildcard);
-                return this.evaluate(newPath, query, request, matchstate, wildcard, timeOut);
+                storeWildCard(splitPath[0], wildcard);
+                return evaluate(newPath, query, request, matchstate, wildcard, timeOut);
             }
 
             // If we get here then we're at a dead end so return an empty string. Hopefully, if the
@@ -316,8 +306,6 @@ namespace ReniBot.AimlEngine.Utils
             }
             wildcard.Append(word);
         }
-        #endregion
 
-        #endregion
     }
 }
