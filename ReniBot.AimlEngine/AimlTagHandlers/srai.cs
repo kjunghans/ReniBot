@@ -12,7 +12,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// As with all AIML elements, nested forms should be parsed from inside out, so embedded srais are 
     /// perfectly acceptable. 
     /// </summary>
-    public class srai : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class Srai : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
         readonly Bot _bot;
         readonly User _user;
@@ -27,7 +27,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public srai(ILogger logger,
+        public Srai(ILogger logger,
                         Bot bot,
                         User user,
                         Request request,
@@ -45,8 +45,10 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
             {
                 if (TemplateNode.InnerText.Length > 0)
                 {
-                    Request subRequest = new Request(TemplateNode.InnerText, _user.UserId);
-                    subRequest.StartedOn = _request.StartedOn; // make sure we don't keep adding time to the request
+                    Request subRequest = new Request(TemplateNode.InnerText, _user.UserId)
+                    {
+                        StartedOn = _request.StartedOn // make sure we don't keep adding time to the request
+                    };
                     Result subQuery = _bot.Chat(subRequest);
                     _request.HasTimedOut = subRequest.HasTimedOut;
                     return subQuery.Output;

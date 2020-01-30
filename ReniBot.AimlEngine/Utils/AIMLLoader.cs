@@ -111,11 +111,11 @@ namespace ReniBot.AimlEngine.Utils
             {
                 if (currentNode.Name == "topic")
                 {
-                    processTopic(currentNode, filename);
+                    ProcessTopic(currentNode, filename);
                 }
                 else if (currentNode.Name == "category")
                 {
-                    processCategory(currentNode, filename);
+                    ProcessCategory(currentNode, filename);
                 }
             }
             return GraphMaster;
@@ -127,7 +127,7 @@ namespace ReniBot.AimlEngine.Utils
         /// </summary>
         /// <param name="node">the "topic" node</param>
         /// <param name="filename">the file from which this node is taken</param>
-        private void processTopic(XmlNode node, string filename)
+        private void ProcessTopic(XmlNode node, string filename)
         {
             // find the name of the topic or set to default "*"
             string topicName = "*";
@@ -141,7 +141,7 @@ namespace ReniBot.AimlEngine.Utils
             {
                 if (thisNode.Name == "category")
                 {
-                    processCategory(thisNode, topicName, filename);
+                    ProcessCategory(thisNode, topicName, filename);
                 }
             }
         }
@@ -151,9 +151,9 @@ namespace ReniBot.AimlEngine.Utils
         /// </summary>
         /// <param name="node">the XML node containing the category</param>
         /// <param name="filename">the file from which this category was taken</param>
-        private void processCategory(XmlNode node, string filename)
+        private void ProcessCategory(XmlNode node, string filename)
         {
-            processCategory(node, "*", filename);
+            ProcessCategory(node, "*", filename);
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="node">the XML node containing the category</param>
         /// <param name="topicName">the topic to be used</param>
         /// <param name="filename">the file from which this category was taken</param>
-        private void processCategory(XmlNode node, string topicName, string filename)
+        private void ProcessCategory(XmlNode node, string topicName, string filename)
         {
             // reference and check the required nodes
             XmlNode pattern = FindNode("pattern", node);
@@ -184,7 +184,7 @@ namespace ReniBot.AimlEngine.Utils
             {
                 try
                 {
-                    GraphMaster.addCategory(categoryPath, template.OuterXml, filename);
+                    GraphMaster.AddCategory(categoryPath, template.OuterXml, filename);
                     // keep count of the number of categories that have been processed
                     GraphSize++;
                 }
@@ -262,10 +262,9 @@ namespace ReniBot.AimlEngine.Utils
         {
             // to hold the normalized path to be entered into the graphmaster
             StringBuilder normalizedPath = new StringBuilder();
-            string normalizedPattern = string.Empty;
-            string normalizedThat = "*";
-            string normalizedTopic = "*";
-
+            string normalizedTopic;
+            string normalizedThat;
+            string normalizedPattern;
             if ((_trustAiml) & (!isUserInput))
             {
                 normalizedPattern = pattern.Trim();

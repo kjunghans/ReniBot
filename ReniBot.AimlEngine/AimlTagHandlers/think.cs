@@ -9,7 +9,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// 
     /// The think element has no attributes. It may contain any AIML template elements.
     /// </summary>
-    public class think : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class Think : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
         /// <summary>
         /// Ctor
@@ -20,12 +20,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public think(ILogger logger,
-                        ReniBot.AimlEngine.User user,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
-                        XmlNode templateNode)
+        public Think(ILogger logger,
+                      XmlNode templateNode)
             : base(logger, templateNode)
         {
         }

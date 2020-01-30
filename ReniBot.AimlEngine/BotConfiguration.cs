@@ -58,23 +58,8 @@ namespace ReniBot.AimlEngine
         /// </summary>
         public List<string> Splitters = new List<string>(); //TODO: Make this a char array.
 
-        /// <summary>
-        /// A buffer to hold log messages to be written out to the log file when a max size is reached
-        /// </summary>
-        private readonly List<string> LogBuffer = new List<string>();
 
-        /// <summary>
-        /// How big to let the log buffer get before writing to disk
-        /// </summary>
-        private int MaxLogBufferSize
-        {
-            get
-            {
-                return Convert.ToInt32(GlobalSettings.grabSetting("maxlogbuffersize"));
-            }
-        }
-
-        /// <summary>
+         /// <summary>
         /// Flag to show if the bot is willing to accept user input
         /// </summary>
         public bool isAcceptingUserInput = true;

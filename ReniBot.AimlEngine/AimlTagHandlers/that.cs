@@ -54,7 +54,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
             {
                 if (TemplateNode.Attributes.Count == 0)
                 {
-                    return _user.getThat();
+                    return _user.GetThat();
                 }
                 else if (TemplateNode.Attributes.Count == 1)
                 {
@@ -72,7 +72,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                     int sentence = Convert.ToInt32(dimensions[1].Trim());
                                     if ((result > 0) & (sentence > 0))
                                     {
-                                        return _user.getThat(result - 1, sentence - 1);
+                                        return _user.GetThat(result - 1, sentence - 1);
                                     }
                                     else
                                     {
@@ -84,7 +84,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                     int result = Convert.ToInt32(TemplateNode.Attributes[0].Value.Trim());
                                     if (result > 0)
                                     {
-                                        return _user.getThat(result - 1);
+                                        return _user.GetThat(result - 1);
                                     }
                                     else
                                     {

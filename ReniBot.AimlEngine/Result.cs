@@ -78,7 +78,7 @@ namespace ReniBot.AimlEngine
                 foreach (string sentence in OutputSentences)
                 {
                     string sentenceForOutput = sentence.Trim();
-                    if (!checkEndsAsSentence(sentenceForOutput))
+                    if (!CheckEndsAsSentence(sentenceForOutput))
                     {
                         sentenceForOutput += ".";
                     }
@@ -155,7 +155,7 @@ namespace ReniBot.AimlEngine
         /// </summary>
         /// <param name="sentence">the sentence to check</param>
         /// <returns>True if ends with an appropriate sentence splitter</returns>
-        private bool checkEndsAsSentence(string sentence)
+        private bool CheckEndsAsSentence(string sentence)
         {
             foreach (string splitter in Splitters)
             {

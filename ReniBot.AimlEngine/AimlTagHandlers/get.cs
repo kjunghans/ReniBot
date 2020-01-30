@@ -19,9 +19,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// 
     /// The get element does not have any content.
     /// </summary>
-    public class get : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class Get : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
-        readonly ILogger _logger;
         readonly BotConfiguration _config;
         readonly User _user;
 
@@ -34,13 +33,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public get(ILogger logger,
+        public Get(ILogger logger,
                     BotConfiguration config,
                         User user,
                         XmlNode templateNode)
             : base(logger, templateNode)
         {
-            _logger = logger;
             _config = config;
             _user = user;
         }

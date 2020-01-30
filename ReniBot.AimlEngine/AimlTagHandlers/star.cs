@@ -19,7 +19,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// 
     /// The star element does not have any content. 
     /// </summary>
-    public class star : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class Star : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
         private readonly ILogger _logger;
         private readonly Utils.SubQuery _query;
@@ -34,11 +34,9 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public star(ILogger logger,
-                        ReniBot.AimlEngine.User user,
+        public Star(ILogger logger,
                         ReniBot.AimlEngine.Utils.SubQuery query,
                         ReniBot.AimlEngine.Request request,
-                        ReniBot.AimlEngine.Result result,
                         XmlNode templateNode)
             : base(logger, templateNode)
         {

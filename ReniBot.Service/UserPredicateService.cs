@@ -26,26 +26,22 @@ namespace ReniBot.Service
         {
             try
             {
-                using (UnitOfWork uow = new UnitOfWork())
+                using UnitOfWork uow = new UnitOfWork();
+                uow.BotUserPredicateRepository.Insert(new BotUserPredicate()
                 {
-                    uow.BotUserPredicateRepository.Insert(new BotUserPredicate()
-                    {
-                        userId = _userId,
-                        key = key,
-                        value = value
-                    });
-                    uow.Save();
-                }
+                    userId = _userId,
+                    key = key,
+                    value = value
+                });
+                uow.Save();
             }
             catch (Exception) //Failed because of duplciate key. TODO: get exact exception for dup key.
             {
-                using (UnitOfWork uow = new UnitOfWork())
-                {
-                    BotUserPredicate predicate = uow.BotUserPredicateRepository.GetItem(p => p.userId == _userId && p.key == key).SingleOrDefault();
-                    predicate.value = value;
-                    uow.BotUserPredicateRepository.Update(predicate);
-                    uow.Save();
-                }
+                using UnitOfWork uow = new UnitOfWork();
+                BotUserPredicate predicate = uow.BotUserPredicateRepository.GetItem(p => p.userId == _userId && p.key == key).SingleOrDefault();
+                predicate.value = value;
+                uow.BotUserPredicateRepository.Update(predicate);
+                uow.Save();
             }
         }
 

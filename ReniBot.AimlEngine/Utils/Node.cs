@@ -49,7 +49,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="path">the path for the category</param>
         /// <param name="template">the template to find at the end of the path</param>
         /// <param name="filename">the file that was the source of this category</param>
-        public void addCategory(string path, string template, string filename)
+        public void AddCategory(string path, string template, string filename)
         {
             if (template.Length == 0)
             {
@@ -75,7 +75,7 @@ namespace ReniBot.AimlEngine.Utils
 
             // concatenate the rest of the sentence into a suffix (to act as the
             // path argument in the child nodemapper)
-            string newPath = path.Substring(firstWord.Length, path.Length - firstWord.Length).Trim();
+            string newPath = path[firstWord.Length..].Trim();
 
             // o.k. check we don't already have a child with the key from this sentence
             // if we do then pass the handling of this sentence down the branch to the 
@@ -83,13 +83,15 @@ namespace ReniBot.AimlEngine.Utils
             if (children.ContainsKey(firstWord))
             {
                 Node childNode = children[firstWord];
-                childNode.addCategory(newPath, template, filename);
+                childNode.AddCategory(newPath, template, filename);
             }
             else
             {
-                Node childNode = new Node();
-                childNode.word = firstWord;
-                childNode.addCategory(newPath, template, filename);
+                Node childNode = new Node
+                {
+                    word = firstWord
+                };
+                childNode.AddCategory(newPath, template, filename);
                 children.Add(childNode.word, childNode);
             }
         }
@@ -105,7 +107,7 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="matchstate">The part of the input path the node represents</param>
         /// <param name="wildcard">The contents of the user input absorbed by the AIML wildcards "_" and "*"</param>
         /// <returns>The template to process to generate the output</returns>
-        public string evaluate(string path, SubQuery query, Request request, MatchState matchstate, StringBuilder wildcard, double timeOut)
+        public string Evaluate(string path, SubQuery query, Request request, MatchState matchstate, StringBuilder wildcard, double timeOut)
         {
             // check for timeout
             if (request.StartedOn.AddMilliseconds(timeOut) < DateTime.Now)
@@ -127,7 +129,7 @@ namespace ReniBot.AimlEngine.Utils
                 {
                     // if we get here it means that there is a wildcard in the user input part of the
                     // path.
-                    storeWildCard(path, wildcard);
+                    StoreWildCard(path, wildcard);
                 }
                 return Template;
             }
@@ -146,7 +148,7 @@ namespace ReniBot.AimlEngine.Utils
             string firstWord = Normalize.MakeCaseInsensitive.TransformInput(splitPath[0]);
 
             // and concatenate the rest of the input into a new path for child nodes
-            string newPath = path.Substring(firstWord.Length, path.Length - firstWord.Length);
+            string newPath = path[firstWord.Length..];
 
             // first option is to see if this node has a child denoted by the "_" 
             // wildcard. "_" comes first in precedence in the AIML alphabet
@@ -156,10 +158,10 @@ namespace ReniBot.AimlEngine.Utils
 
                 // add the next word to the wildcard match 
                 StringBuilder newWildcard = new StringBuilder();
-                storeWildCard(splitPath[0], newWildcard);
+                StoreWildCard(splitPath[0], newWildcard);
 
                 // move down into the identified branch of the GraphMaster structure
-                string result = childNode.evaluate(newPath, query, request, matchstate, newWildcard, timeOut);
+                string result = childNode.Evaluate(newPath, query, request, matchstate, newWildcard, timeOut);
 
                 // and if we get a result from the branch process the wildcard matches and return 
                 // the result
@@ -210,7 +212,7 @@ namespace ReniBot.AimlEngine.Utils
                 // move down into the identified branch of the GraphMaster structure using the new
                 // matchstate
                 StringBuilder newWildcard = new StringBuilder();
-                string result = childNode.evaluate(newPath, query, request, newMatchstate, newWildcard, timeOut);
+                string result = childNode.Evaluate(newPath, query, request, newMatchstate, newWildcard, timeOut);
                 // and if we get a result from the child return it
                 if (result.Length > 0)
                 {
@@ -248,9 +250,9 @@ namespace ReniBot.AimlEngine.Utils
 
                 // add the next word to the wildcard match 
                 StringBuilder newWildcard = new StringBuilder();
-                storeWildCard(splitPath[0], newWildcard);
+                StoreWildCard(splitPath[0], newWildcard);
 
-                string result = childNode.evaluate(newPath, query, request, matchstate, newWildcard, timeOut);
+                string result = childNode.Evaluate(newPath, query, request, matchstate, newWildcard, timeOut);
                 // and if we get a result from the branch process and return it
                 if (result.Length > 0)
                 {
@@ -282,14 +284,14 @@ namespace ReniBot.AimlEngine.Utils
             // valid if we proceed with the tail.
             if ((word == "_") || (word == "*"))
             {
-                storeWildCard(splitPath[0], wildcard);
-                return evaluate(newPath, query, request, matchstate, wildcard, timeOut);
+                StoreWildCard(splitPath[0], wildcard);
+                return Evaluate(newPath, query, request, matchstate, wildcard, timeOut);
             }
 
             // If we get here then we're at a dead end so return an empty string. Hopefully, if the
             // AIML files have been set up to include a "* <that> * <topic> *" catch-all this
             // state won't be reached. Remember to empty the surplus to requirements wildcard matches
-            wildcard = new StringBuilder();
+            _ = new StringBuilder();
             return string.Empty;
         }
 
@@ -298,7 +300,7 @@ namespace ReniBot.AimlEngine.Utils
         /// </summary>
         /// <param name="word">The word matched by the wildcard</param>
         /// <param name="wildcard">The contents of the user input absorbed by the AIML wildcards "_" and "*"</param>
-        private void storeWildCard(string word, StringBuilder wildcard)
+        private void StoreWildCard(string word, StringBuilder wildcard)
         {
             if (wildcard.Length > 0)
             {

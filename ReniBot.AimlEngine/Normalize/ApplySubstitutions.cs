@@ -26,7 +26,7 @@ namespace ReniBot.AimlEngine.Normalize
         /// </summary>
         /// <param name="len">The length of the marker</param>
         /// <returns>the resulting marker</returns>
-        private static string getMarker(int len)
+        private static string GetMarker(int len)
         {
             char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
             StringBuilder result = new StringBuilder();
@@ -53,11 +53,11 @@ namespace ReniBot.AimlEngine.Normalize
         /// <returns>The processed string</returns>
         public static string Substitute(Utils.SettingsDictionary dictionary, string target)
         {
-            string marker = ApplySubstitutions.getMarker(5);
+            string marker = ApplySubstitutions.GetMarker(5);
             string result = target;
             foreach (string pattern in dictionary.SettingNames)
             {
-                string p2 = ApplySubstitutions.makeRegexSafe(pattern);
+                string p2 = ApplySubstitutions.MakeRegexSafe(pattern);
                 //string match = "\\b"+@p2.Trim().Replace(" ","\\s*")+"\\b";
                 string match = "\\b" + p2.TrimEnd().TrimStart() + "\\b";
                 string replacement = marker + dictionary.grabSetting(pattern).Trim() + marker;
@@ -73,7 +73,7 @@ namespace ReniBot.AimlEngine.Normalize
         /// </summary>
         /// <param name="input">The raw input</param>
         /// <returns>the safe version</returns>
-        private static string makeRegexSafe(string input)
+        private static string MakeRegexSafe(string input)
         {
             string result = input.Replace("\\", "");
             result = result.Replace(")", "\\)");

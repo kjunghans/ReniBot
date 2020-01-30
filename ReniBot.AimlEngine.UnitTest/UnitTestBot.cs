@@ -18,8 +18,10 @@ namespace ReniBot.AimlEngine.UnitTest
             var mockApplicationService = new Mock<IApplicationService>();
             mockApplicationService.Setup(x => x.GetApplicationIdFromKey(It.IsAny<string>())).Returns(1);
             List<AimlDoc> docList = new List<AimlDoc>();
-            AimlDoc doc = new AimlDoc();
-            doc.appId = 1;
+            AimlDoc doc = new AimlDoc
+            {
+                appId = 1
+            };
             string name = "AI.aiml";
             string path = "./" + name;
             doc.document = File.ReadAllText(path);

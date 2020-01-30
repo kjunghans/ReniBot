@@ -12,8 +12,10 @@ namespace ReniBot.AimlEngine.Utils
         public Request Create(string input, int userId)
         {
             int requestId = _userRequestService.Add(input, userId);
-            Request request = new Request(input, userId);
-            request.Id = requestId;
+            Request request = new Request(input, userId)
+            {
+                Id = requestId
+            };
 
             return request;
         }

@@ -105,7 +105,7 @@ namespace ReniBot.AimlEngine
                 foreach (string path in result.NormalizedPaths)
                 {
                     Utils.SubQuery query = new SubQuery(path);
-                    query.Template = _graphmaster.evaluate(path, query, request, MatchState.UserInput, new StringBuilder(), _config.TimeOut);
+                    query.Template = _graphmaster.Evaluate(path, query, request, MatchState.UserInput, new StringBuilder(), _config.TimeOut);
                     result.HasTimedOut = request.HasTimedOut;
                     result.SubQueries.Add(query);
                 }
@@ -117,8 +117,8 @@ namespace ReniBot.AimlEngine
                     {
                         try
                         {
-                            XmlNode templateNode = AIMLTagHandler.getNode(query.Template);
-                            string outputSentence = processNode(templateNode, query, request, result, new User(_botUserService, _predicateService, _userResultService, _requestService) { UserId = request.UserId });
+                            XmlNode templateNode = AIMLTagHandler.GetNode(query.Template);
+                            string outputSentence = ProcessNode(templateNode, query, request, result, new User( _predicateService, _userResultService, _requestService) { UserId = request.UserId });
                             if (outputSentence.Length > 0)
                             {
                                 result.OutputSentences.Add(outputSentence);
@@ -128,7 +128,7 @@ namespace ReniBot.AimlEngine
                         {
                             if (_config.WillCallHome)
                             {
-                                phoneHome(e.Message, request);
+                                PhoneHome(e.Message, request);
                             }
                             _logger.LogWarning("A problem was encountered when trying to process the input: " + request.RawInput + " with the template: \"" + query.Template + "\"");
                         }
@@ -162,7 +162,7 @@ namespace ReniBot.AimlEngine
         /// <param name="result">the result to be sent to the user</param>
         /// <param name="user">the user who originated the request</param>
         /// <returns>the output string</returns>
-        private string processNode(XmlNode node, SubQuery query, Request request, Result result, User user)
+        private string ProcessNode(XmlNode node, SubQuery query, Request request, Result result, User user)
         {
             // check for timeout (to avoid infinite loops)
             if (request.StartedOn.AddMilliseconds(_config.TimeOut) < DateTime.Now)
@@ -182,7 +182,7 @@ namespace ReniBot.AimlEngine
                     // recursively check
                     foreach (XmlNode childNode in node.ChildNodes)
                     {
-                        templateResult.Append(processNode(childNode, query, request, result, user));
+                        templateResult.Append(ProcessNode(childNode, query, request, result, user));
                     }
                 }
                 return templateResult.ToString();
@@ -205,7 +205,7 @@ namespace ReniBot.AimlEngine
                             {
                                 if (childNode.NodeType != XmlNodeType.Text)
                                 {
-                                    childNode.InnerXml = processNode(childNode, query, request, result, user);
+                                    childNode.InnerXml = ProcessNode(childNode, query, request, result, user);
                                 }
                             }
                         }
@@ -214,14 +214,14 @@ namespace ReniBot.AimlEngine
                     else
                     {
                         string resultNodeInnerXML = tagHandler.Transform();
-                        XmlNode resultNode = AIMLTagHandler.getNode("<node>" + resultNodeInnerXML + "</node>");
+                        XmlNode resultNode = AIMLTagHandler.GetNode("<node>" + resultNodeInnerXML + "</node>");
                         if (resultNode.HasChildNodes)
                         {
                             StringBuilder recursiveResult = new StringBuilder();
                             // recursively check
                             foreach (XmlNode childNode in resultNode.ChildNodes)
                             {
-                                recursiveResult.Append(processNode(childNode, query, request, result, user));
+                                recursiveResult.Append(ProcessNode(childNode, query, request, result, user));
                             }
                             return recursiveResult.ToString();
                         }
@@ -241,12 +241,14 @@ namespace ReniBot.AimlEngine
         /// </summary>
         /// <param name="errorMessage">the resulting error message</param>
         /// <param name="request">the request object that encapsulates all sorts of useful information</param>
-        public void phoneHome(string errorMessage, Request request)
+        public void PhoneHome(string errorMessage, Request request)
         {
             MailAddress fromAddress = new MailAddress("donotreply@ReniBot.AimlEngine.com");
             MailAddress toAddress = new MailAddress(_config.AdminEmail);
-            MailMessage msg = new MailMessage(fromAddress, toAddress);
-            msg.Subject = "WARNING! ReniBot.AimlEngine has encountered a problem...";
+            MailMessage msg = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = "WARNING! ReniBot.AimlEngine has encountered a problem..."
+            };
             string message = @"Dear Botmaster,
 
 This is an automatically generated email to report errors with your bot.

@@ -34,7 +34,7 @@ namespace ReniBot.AimlEngine.Utils
             if (Assemblies.ContainsKey(AssemblyName))
             {
                 Assembly tagDLL = Assemblies[AssemblyName];
-                Type[] tagDLLTypes = tagDLL.GetTypes();
+                _ = tagDLL.GetTypes();
                 return (AIMLTagHandler)tagDLL.CreateInstance(ClassName);
             }
             else

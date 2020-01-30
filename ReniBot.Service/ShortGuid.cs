@@ -206,7 +206,9 @@ namespace ReniBot.Service
         /// <returns></returns>
         public static bool operator ==(ShortGuid x, ShortGuid y)
         {
+#pragma warning disable IDE0041 // Use 'is null' check
             if ((object)x == null) return (object)y == null;
+#pragma warning restore IDE0041 // Use 'is null' check
             return x._guid == y._guid;
         }
 

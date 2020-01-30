@@ -16,14 +16,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// If no character in this string has a different uppercase version, based on the Unicode 
     /// standard, then the original string is returned. 
     /// </summary>
-    public class sentence : Utils.AIMLTagHandler
+    public class Sentence : Utils.AIMLTagHandler
     {
         readonly BotConfiguration _config;
         readonly ILogger _logger;
-        readonly User _user;
         readonly Utils.SubQuery _query;
         readonly Request _request;
-        readonly Result _result;
 
         /// <summary>
         /// Ctor
@@ -34,20 +32,16 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="request">The request inputted into the system</param>
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
-        public sentence(ILogger logger,
+        public Sentence(ILogger logger,
                          BotConfiguration config,
-                        User user,
                         Utils.SubQuery query,
                         Request request,
-                        Result result,
                         XmlNode templateNode)
             : base(logger, templateNode)
         {
             _config = config;
-            _user = user;
             _query = query;
             _request = request;
-            _result = result;
             _logger = logger;
 
         }
@@ -93,8 +87,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                 else
                 {
                     // atomic version of the node
-                    XmlNode starNode = Utils.AIMLTagHandler.getNode("<star/>");
-                    star recursiveStar = new star(_logger, _user, _query, _request, _result, starNode);
+                    XmlNode starNode = Utils.AIMLTagHandler.GetNode("<star/>");
+                    Star recursiveStar = new Star(_logger,  _query, _request,  starNode);
                     TemplateNode.InnerText = recursiveStar.Transform();
                     if (TemplateNode.InnerText.Length > 0)
                     {

@@ -51,7 +51,6 @@ namespace ReniBot.AimlEngine
             }
         }
 
-        private readonly IBotUserService _botUserService;
         private readonly IUserRequestService _requestService;
         private readonly BotConverter _converter;
 
@@ -60,9 +59,8 @@ namespace ReniBot.AimlEngine
         /// </summary>
         /// <param name="userKey">The GUID of the user</param>
         /// <param name="bot">the bot the user is connected to</param>
-		public User(IBotUserService botUserService, IUserPredicateService userPredicateService, IUserResultService userResultService, IUserRequestService requestService)
+		public User(IUserPredicateService userPredicateService, IUserResultService userResultService, IUserRequestService requestService)
         {
-            _botUserService = botUserService;
             _predicates = userPredicateService;
             _results = userResultService;
             //bot.DefaultPredicates.Clone(Predicates);
@@ -76,7 +74,7 @@ namespace ReniBot.AimlEngine
         /// Returns the string to use for the next that part of a subsequent path
         /// </summary>
         /// <returns>the string to use for that</returns>
-        public string getLastBotOutput()
+        public string GetLastBotOutput()
         {
             if (_results.Count(UserId) > 0)
             {
@@ -92,9 +90,9 @@ namespace ReniBot.AimlEngine
         /// Returns the first sentence of the last output from the bot
         /// </summary>
         /// <returns>the first sentence of the last output from the bot</returns>
-        public string getThat()
+        public string GetThat()
         {
-            return getThat(0, 0);
+            return GetThat(0, 0);
         }
 
         /// <summary>
@@ -102,9 +100,9 @@ namespace ReniBot.AimlEngine
         /// </summary>
         /// <param name="n">the number of steps back to go</param>
         /// <returns>the first sentence of the output "n" steps ago from the bot</returns>
-        public string getThat(int n)
+        public string GetThat(int n)
         {
-            return getThat(n, 0);
+            return GetThat(n, 0);
         }
 
         /// <summary>
@@ -113,7 +111,7 @@ namespace ReniBot.AimlEngine
         /// <param name="n">the number of steps back to go</param>
         /// <param name="sentence">the sentence number to get</param>
         /// <returns>the sentence numbered by "sentence" of the output "n" steps ago from the bot</returns>
-        public string getThat(int n, int sentence)
+        public string GetThat(int n, int sentence)
         {
             if ((n >= 0) & (n < _results.Count(UserId)))
             {
@@ -130,9 +128,9 @@ namespace ReniBot.AimlEngine
         /// Returns the first sentence of the last output from the bot
         /// </summary>
         /// <returns>the first sentence of the last output from the bot</returns>
-        public string getResultSentence()
+        public string GetResultSentence()
         {
-            return getResultSentence(0, 0);
+            return GetResultSentence(0, 0);
         }
 
         /// <summary>
@@ -140,9 +138,9 @@ namespace ReniBot.AimlEngine
         /// </summary>
         /// <param name="n">the number of steps back to go</param>
         /// <returns>the first sentence from the output from the bot "n" steps ago</returns>
-        public string getResultSentence(int n)
+        public string GetResultSentence(int n)
         {
-            return getResultSentence(n, 0);
+            return GetResultSentence(n, 0);
         }
 
         /// <summary>
@@ -151,7 +149,7 @@ namespace ReniBot.AimlEngine
         /// <param name="n">the number of steps back to go</param>
         /// <param name="sentence">the sentence number to return</param>
         /// <returns>the identified sentence number from the output from the bot "n" steps ago</returns>
-        public string getResultSentence(int n, int sentence)
+        public string GetResultSentence(int n, int sentence)
         {
             if ((n >= 0) & (n < _results.Count(UserId)))
             {
@@ -168,7 +166,7 @@ namespace ReniBot.AimlEngine
         /// Adds the latest result from the bot to the Results collection
         /// </summary>
         /// <param name="latestResult">the latest result from the bot</param>
-        public void addResult(Result latestResult)
+        public void AddResult(Result latestResult)
         {
             _results.Add(latestResult.Duration.Milliseconds, latestResult.HasTimedOut, latestResult.RawOutput,
                 latestResult.RequestId, latestResult.UserId);
