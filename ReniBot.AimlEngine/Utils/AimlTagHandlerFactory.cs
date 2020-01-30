@@ -80,6 +80,7 @@ namespace ReniBot.AimlEngine.Utils
                 }
                 else
                 {
+                    //TODO: Need to figure out design pattern where only necessary objects are passed to object
                     //newCustomTag.user = user;
                     //newCustomTag.query = query;
                     //newCustomTag.request = request;
