@@ -60,7 +60,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                 if (TemplateNode.InnerText.Length > 0)
                 {
                     // non atomic version of the node
-                    return ReniBot.AimlEngine.Normalize.ApplySubstitutions.Substitute(_config.Person2Substitutions, TemplateNode.InnerText);
+                    return new Normalize.ApplySubstitutions(_config.Person2Substitutions).Transform(TemplateNode.InnerText);
                 }
                 else
                 {

@@ -62,8 +62,7 @@ namespace ReniBot.AimlEngine.UnitTest
             IApplicationService applicationService = GetMockAppService();
 
             SettingsDictionary substitutions = new SettingsDictionary();
-            string inputString = "";
-            Normalize.ApplySubstitutions substitutor = new Normalize.ApplySubstitutions(substitutions, inputString);
+            Normalize.ApplySubstitutions substitutor = new Normalize.ApplySubstitutions(substitutions);
             Regex strippers = new Regex("[^0-9a-zA-Z]");
             Normalize.StripIllegalCharacters stripper = new Normalize.StripIllegalCharacters(strippers);
             IAimlLoader loader = new AIMLLoader(logger, substitutor, stripper, true, 1000);

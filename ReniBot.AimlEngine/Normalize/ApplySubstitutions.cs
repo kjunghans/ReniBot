@@ -8,25 +8,22 @@ namespace ReniBot.AimlEngine.Normalize
     /// Checks the text for any matches in the bot's substitutions dictionary and makes
     /// any appropriate changes.
     /// </summary>
-    public class ApplySubstitutions : Utils.TextTransformer
+    public class ApplySubstitutions 
     {
-        private readonly Utils.SettingsDictionary _substitutions;
-        public ApplySubstitutions(Utils.SettingsDictionary substitutions, string inputString)
-            : base(inputString)
+
+        private readonly Utils.SettingsDictionary _dictionary;
+
+        public ApplySubstitutions(Utils.SettingsDictionary dictionary)
         {
-            _substitutions = substitutions;
+            _dictionary = dictionary;
         }
-
-        public ApplySubstitutions()
-            : base()
-        { }
-
+ 
         /// <summary>
         /// Produces a random "marker" string that tags text that is already the result of a substitution
         /// </summary>
         /// <param name="len">The length of the marker</param>
         /// <returns>the resulting marker</returns>
-        private static string GetMarker(int len)
+        private string GetMarker(int len)
         {
             char[] chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
             StringBuilder result = new StringBuilder();
@@ -38,11 +35,6 @@ namespace ReniBot.AimlEngine.Normalize
             return result.ToString();
         }
 
-        protected override string ProcessChange()
-        {
-            return ApplySubstitutions.Substitute(_substitutions, InputString);
-        }
-
         /// <summary>
         /// Static helper that applies replacements from the passed dictionary object to the 
         /// target string
@@ -51,16 +43,16 @@ namespace ReniBot.AimlEngine.Normalize
         /// <param name="dictionary">The dictionary containing the substitutions</param>
         /// <param name="target">the target string to which the substitutions are to be applied</param>
         /// <returns>The processed string</returns>
-        public static string Substitute(Utils.SettingsDictionary dictionary, string target)
+        public string Transform(string target)
         {
-            string marker = ApplySubstitutions.GetMarker(5);
+            string marker = GetMarker(5);
             string result = target;
-            foreach (string pattern in dictionary.SettingNames)
+            foreach (string pattern in _dictionary.SettingNames)
             {
-                string p2 = ApplySubstitutions.MakeRegexSafe(pattern);
+                string p2 = MakeRegexSafe(pattern);
                 //string match = "\\b"+@p2.Trim().Replace(" ","\\s*")+"\\b";
                 string match = "\\b" + p2.TrimEnd().TrimStart() + "\\b";
-                string replacement = marker + dictionary.grabSetting(pattern).Trim() + marker;
+                string replacement = marker + _dictionary.grabSetting(pattern).Trim() + marker;
                 result = Regex.Replace(result, match, replacement, RegexOptions.IgnoreCase);
             }
 
@@ -73,7 +65,7 @@ namespace ReniBot.AimlEngine.Normalize
         /// </summary>
         /// <param name="input">The raw input</param>
         /// <returns>the safe version</returns>
-        private static string MakeRegexSafe(string input)
+        private string MakeRegexSafe(string input)
         {
             string result = input.Replace("\\", "");
             result = result.Replace(")", "\\)");
