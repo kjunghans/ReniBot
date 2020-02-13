@@ -14,7 +14,6 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class uppercase : Utils.AIMLTagHandler
     {
-        private readonly CultureInfo _locale;
 
         /// <summary>
         /// Ctor
@@ -26,18 +25,16 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public uppercase(ILogger logger,
-                            CultureInfo locale,
-                         XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "uppercase")
         {
-            _locale = locale;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "uppercase")
             {
-                return TemplateNode.InnerText.ToUpper(_locale);
+                return TemplateNode.InnerText.ToUpper(Context.Configuration.Locale);
             }
             return string.Empty;
         }

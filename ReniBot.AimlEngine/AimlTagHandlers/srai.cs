@@ -12,11 +12,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// As with all AIML elements, nested forms should be parsed from inside out, so embedded srais are 
     /// perfectly acceptable. 
     /// </summary>
-    public class Srai : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class Srai : Utils.AIMLTagHandler
     {
-        readonly Bot _bot;
-        readonly User _user;
-        readonly Request _request;
 
         /// <summary>
         /// Ctor
@@ -28,29 +25,23 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public Srai(ILogger logger,
-                        Bot bot,
-                        User user,
-                        Request request,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "srai")
         {
-            _bot = bot;
-            _user = user;
-            _request = request;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "srai")
             {
                 if (TemplateNode.InnerText.Length > 0)
                 {
-                    Request subRequest = new Request(TemplateNode.InnerText, _user.UserId)
+                    Request subRequest = new Request(TemplateNode.InnerText, Context.User.UserId)
                     {
-                        StartedOn = _request.StartedOn // make sure we don't keep adding time to the request
+                        StartedOn = Context.Request.StartedOn // make sure we don't keep adding time to the request
                     };
-                    Result subQuery = _bot.Chat(subRequest);
-                    _request.HasTimedOut = subRequest.HasTimedOut;
+                    Result subQuery = Context.Bot.Chat(subRequest);
+                    Context.Request.HasTimedOut = subRequest.HasTimedOut;
                     return subQuery.Output;
                 }
             }

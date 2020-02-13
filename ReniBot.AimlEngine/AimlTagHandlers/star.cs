@@ -21,9 +21,6 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class Star : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
-        private readonly ILogger _logger;
-        private readonly Utils.SubQuery _query;
-        private readonly Request _request;
 
         /// <summary>
         /// Ctor
@@ -35,26 +32,21 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public Star(ILogger logger,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "star")
         {
-            _logger = logger;
-            _query = query;
-            _request = request;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "star")
             {
-                if (_query.InputStar.Count > 0)
+                if (Context.query.InputStar.Count > 0)
                 {
                     if (TemplateNode.Attributes.Count == 0)
                     {
                         // return the first (latest) star in the List<>
-                        return _query.InputStar[0];
+                        return Context.query.InputStar[0];
                     }
                     else if (TemplateNode.Attributes.Count == 1)
                     {
@@ -64,25 +56,25 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                             {
                                 int index = Convert.ToInt32(TemplateNode.Attributes[0].Value);
                                 index--;
-                                if ((index >= 0) & (index < _query.InputStar.Count))
+                                if ((index >= 0) & (index < Context.query.InputStar.Count))
                                 {
-                                    return _query.InputStar[index];
+                                    return Context.query.InputStar[index];
                                 }
                                 else
                                 {
-                                    _logger.LogWarning("InputStar out of bounds reference caused by input: " + _request.RawInput);
+                                    Logger.LogWarning("InputStar out of bounds reference caused by input: " + Context.Request.RawInput);
                                 }
                             }
                             catch
                             {
-                                _logger.LogWarning("Index set to non-integer value whilst processing star tag in response to the input: " + _request.RawInput);
+                                Logger.LogWarning("Index set to non-integer value whilst processing star tag in response to the input: " + Context.Request.RawInput);
                             }
                         }
                     }
                 }
                 else
                 {
-                    _logger.LogWarning("A star tag tried to reference an empty InputStar collection when processing the input: " + _request.RawInput);
+                    Logger.LogWarning("A star tag tried to reference an empty InputStar collection when processing the input: " + Context.Request.RawInput);
                 }
             }
             return string.Empty;

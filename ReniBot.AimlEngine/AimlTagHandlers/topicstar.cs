@@ -16,10 +16,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class Topicstar : Utils.AIMLTagHandler
     {
-        readonly Utils.SubQuery _query;
-        readonly Request _request;
-        readonly ILogger _logger;
-
+ 
         /// <summary>
         /// Ctor
         /// </summary>
@@ -30,29 +27,24 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public Topicstar(ILogger logger,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "topicstar")
         {
-            _logger = logger;
-            _request = request;
-            _query = query;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "topicstar")
             {
                 if (TemplateNode.Attributes.Count == 0)
                 {
-                    if (_query.TopicStar.Count > 0)
+                    if (Context.query.TopicStar.Count > 0)
                     {
-                        return _query.TopicStar[0];
+                        return Context.query.TopicStar[0];
                     }
                     else
                     {
-                        _logger.LogError("An out of bounds index to topicstar was encountered when processing the input: " + _request.RawInput);
+                        Logger.LogError("An out of bounds index to topicstar was encountered when processing the input: " + Context.Request.RawInput);
                     }
                 }
                 else if (TemplateNode.Attributes.Count == 1)
@@ -64,25 +56,25 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                             try
                             {
                                 int result = Convert.ToInt32(TemplateNode.Attributes[0].Value.Trim());
-                                if (_query.TopicStar.Count > 0)
+                                if (Context.query.TopicStar.Count > 0)
                                 {
                                     if (result > 0)
                                     {
-                                        return _query.TopicStar[result - 1];
+                                        return Context.query.TopicStar[result - 1];
                                     }
                                     else
                                     {
-                                        _logger.LogError("An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
+                                        Logger.LogError("An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + Context.Request.RawInput);
                                     }
                                 }
                                 else
                                 {
-                                    _logger.LogError("An out of bounds index to topicstar was encountered when processing the input: " + _request.RawInput);
+                                    Logger.LogError("An out of bounds index to topicstar was encountered when processing the input: " + Context.Request.RawInput);
                                 }
                             }
                             catch
                             {
-                                _logger.LogError("A thatstar tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
+                                Logger.LogError("A thatstar tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + Context.Request.RawInput);
                             }
                         }
                     }

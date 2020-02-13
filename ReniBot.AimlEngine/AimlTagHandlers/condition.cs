@@ -92,7 +92,6 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class condition : Utils.AIMLTagHandler
     {
-        readonly User _user;
         /// <summary>
         /// Ctor
         /// </summary>
@@ -103,59 +102,57 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public condition(ILogger logger,
-                        User user,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "condition")
         {
-            isRecursive = false;
-            _user = user;
-        }
+            base.isRecursive = false;
+         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode templateNode)
         {
-            if (TemplateNode.Name.ToLower() == "condition")
+            if (templateNode.Name.ToLower() == "condition")
             {
                 // heuristically work out the type of condition being processed
 
-                if (TemplateNode.Attributes.Count == 2) // block
+                if (templateNode.Attributes.Count == 2) // block
                 {
                     string name = "";
                     string value = "";
 
-                    if (TemplateNode.Attributes[0].Name == "name")
+                    if (templateNode.Attributes[0].Name == "name")
                     {
-                        name = TemplateNode.Attributes[0].Value;
+                        name = templateNode.Attributes[0].Value;
                     }
-                    else if (TemplateNode.Attributes[0].Name == "value")
+                    else if (templateNode.Attributes[0].Name == "value")
                     {
-                        value = TemplateNode.Attributes[0].Value;
+                        value = templateNode.Attributes[0].Value;
                     }
 
-                    if (TemplateNode.Attributes[1].Name == "name")
+                    if (templateNode.Attributes[1].Name == "name")
                     {
-                        name = TemplateNode.Attributes[1].Value;
+                        name = templateNode.Attributes[1].Value;
                     }
-                    else if (TemplateNode.Attributes[1].Name == "value")
+                    else if (templateNode.Attributes[1].Name == "value")
                     {
-                        value = TemplateNode.Attributes[1].Value;
+                        value = templateNode.Attributes[1].Value;
                     }
 
                     if ((name.Length > 0) & (value.Length > 0))
                     {
-                        string actualValue = _user.Predicates.grabSetting(name);
+                        string actualValue = Context.User.Predicates.grabSetting(name);
                         Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
                         if (matcher.IsMatch(actualValue))
                         {
-                            return TemplateNode.InnerXml;
+                            return templateNode.InnerXml;
                         }
                     }
                 }
-                else if (TemplateNode.Attributes.Count == 1) // single predicate
+                else if (templateNode.Attributes.Count == 1) // single predicate
                 {
-                    if (TemplateNode.Attributes[0].Name == "name")
+                    if (templateNode.Attributes[0].Name == "name")
                     {
-                        string name = TemplateNode.Attributes[0].Value;
-                        foreach (XmlNode childLINode in TemplateNode.ChildNodes)
+                        string name = templateNode.Attributes[0].Value;
+                        foreach (XmlNode childLINode in templateNode.ChildNodes)
                         {
                             if (childLINode.Name.ToLower() == "li")
                             {
@@ -163,7 +160,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                 {
                                     if (childLINode.Attributes[0].Name.ToLower() == "value")
                                     {
-                                        string actualValue = _user.Predicates.grabSetting(name);
+                                        string actualValue = Context.User.Predicates.grabSetting(name);
                                         Regex matcher = new Regex(childLINode.Attributes[0].Value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
                                         if (matcher.IsMatch(actualValue))
                                         {
@@ -179,9 +176,9 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                         }
                     }
                 }
-                else if (TemplateNode.Attributes.Count == 0) // multi-predicate
+                else if (templateNode.Attributes.Count == 0) // multi-predicate
                 {
-                    foreach (XmlNode childLINode in TemplateNode.ChildNodes)
+                    foreach (XmlNode childLINode in templateNode.ChildNodes)
                     {
                         if (childLINode.Name.ToLower() == "li")
                         {
@@ -209,7 +206,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
 
                                 if ((name.Length > 0) & (value.Length > 0))
                                 {
-                                    string actualValue = _user.Predicates.grabSetting(name);
+                                    string actualValue = Context.User.Predicates.grabSetting(name);
                                     Regex matcher = new Regex(value.Replace(" ", "\\s").Replace("*", "[\\sA-Z0-9]+"), RegexOptions.IgnoreCase);
                                     if (matcher.IsMatch(actualValue))
                                     {

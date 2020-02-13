@@ -22,11 +22,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// 
     /// The template-side that element does not have any content. 
     /// </summary>
-    public class that : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class that : Utils.AIMLTagHandler
     {
-        readonly ILogger _logger;
-        readonly User _user;
-        readonly Request _request;
 
         /// <summary>
         /// Ctor
@@ -38,23 +35,18 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public that(ILogger logger,
-                        User user,
-                        Request request,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "that")
         {
-            _logger = logger;
-            _user = user;
-            _request = request;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "that")
             {
                 if (TemplateNode.Attributes.Count == 0)
                 {
-                    return _user.GetThat();
+                    return Context.User.GetThat();
                 }
                 else if (TemplateNode.Attributes.Count == 1)
                 {
@@ -72,11 +64,11 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                     int sentence = Convert.ToInt32(dimensions[1].Trim());
                                     if ((result > 0) & (sentence > 0))
                                     {
-                                        return _user.GetThat(result - 1, sentence - 1);
+                                        return Context.User.GetThat(result - 1, sentence - 1);
                                     }
                                     else
                                     {
-                                        _logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
+                                        Logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + Context.Request.RawInput);
                                     }
                                 }
                                 else
@@ -84,17 +76,17 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                     int result = Convert.ToInt32(TemplateNode.Attributes[0].Value.Trim());
                                     if (result > 0)
                                     {
-                                        return _user.GetThat(result - 1);
+                                        return Context.User.GetThat(result - 1);
                                     }
                                     else
                                     {
-                                        _logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
+                                        Logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + Context.Request.RawInput);
                                     }
                                 }
                             }
                             catch
                             {
-                                _logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
+                                Logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + Context.Request.RawInput);
                             }
                         }
                     }

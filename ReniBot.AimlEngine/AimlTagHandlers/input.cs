@@ -24,10 +24,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class input : Utils.AIMLTagHandler
     {
-        readonly User _user;
-        readonly ILogger _logger;
-        readonly Request _request;
-
+ 
         /// <summary>
         /// Ctor
         /// </summary>
@@ -38,23 +35,18 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public input(ILogger logger,
-                        User user,
-                        Request request,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "input")
         {
-            _user = user;
-            _logger = logger;
-            _request = request;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "input")
             {
                 if (TemplateNode.Attributes.Count == 0)
                 {
-                    return _user.GetResultSentence();
+                    return Context.User.GetResultSentence();
                 }
                 else if (TemplateNode.Attributes.Count == 1)
                 {
@@ -72,11 +64,11 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                     int sentence = Convert.ToInt32(dimensions[1].Trim());
                                     if ((result > 0) & (sentence > 0))
                                     {
-                                        return _user.GetResultSentence(result - 1, sentence - 1);
+                                        return Context.User.GetResultSentence(result - 1, sentence - 1);
                                     }
                                     else
                                     {
-                                        _logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
+                                        Logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + Context.Request.RawInput);
                                     }
                                 }
                                 else
@@ -84,17 +76,17 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                                     int result = Convert.ToInt32(TemplateNode.Attributes[0].Value.Trim());
                                     if (result > 0)
                                     {
-                                        return _user.GetResultSentence(result - 1);
+                                        return Context.User.GetResultSentence(result - 1);
                                     }
                                     else
                                     {
-                                        _logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
+                                        Logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + Context.Request.RawInput);
                                     }
                                 }
                             }
                             catch
                             {
-                                _logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
+                                Logger.LogError("ERROR! An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + Context.Request.RawInput);
                             }
                         }
                     }

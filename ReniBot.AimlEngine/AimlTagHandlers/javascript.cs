@@ -8,7 +8,6 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class javascript : ReniBot.AimlEngine.Utils.AIMLTagHandler
     {
-        private readonly ILogger _logger;
 
         /// <summary>
         /// Ctor
@@ -20,15 +19,14 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public javascript(ILogger logger,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "javascript")
         {
-            _logger = logger;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
-            _logger.LogWarning("The javascript tag is not implemented in this bot");
+            Logger.LogWarning("The javascript tag is not implemented in this bot");
             return string.Empty;
         }
     }

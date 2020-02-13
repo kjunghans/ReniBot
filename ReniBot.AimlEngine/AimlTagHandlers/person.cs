@@ -26,10 +26,6 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class Person : Utils.AIMLTagHandler
     {
-        readonly BotConfiguration _config;
-        readonly ILogger _logger;
-        readonly Utils.SubQuery _query;
-        readonly Request _request;
 
         /// <summary>
         /// Ctor
@@ -41,36 +37,28 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public Person(ILogger logger,
-                        BotConfiguration config,
-                        Utils.SubQuery query,
-                        Request request,
-                         XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "person")
         {
-            _config = config;
-            _query = query;
-            _request = request;
-            _logger = logger;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "person")
             {
                 if (TemplateNode.InnerText.Length > 0)
                 {
                     // non atomic version of the node
-                    return new Normalize.ApplySubstitutions(_config.Substitutions).Transform(TemplateNode.InnerText);
+                    return new Normalize.ApplySubstitutions(Context.Configuration.Substitutions).Transform(TemplateNode.InnerText);
                 }
                 else
                 {
                     // atomic version of the node
-                    XmlNode starNode = Utils.AIMLTagHandler.GetNode("<star/>");
-                    Star recursiveStar = new Star(_logger, _query, _request, starNode);
-                    TemplateNode.InnerText = recursiveStar.Transform();
+                    Star recursiveStar = new Star(Logger, Context);
+                    TemplateNode.InnerText = recursiveStar.ProcessChange(Utils.AIMLTagHandler.GetNode("<star/>"));
                     if (TemplateNode.InnerText.Length > 0)
                     {
-                        return ProcessChange();
+                        return ProcessChange(Utils.AIMLTagHandler.GetNode("<star/>"));
                     }
                     else
                     {

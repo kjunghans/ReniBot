@@ -20,11 +20,9 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// 
     /// A set element may contain any AIML template elements.
     /// </summary>
-    public class set : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class set : Utils.AIMLTagHandler
     {
-        readonly BotConfiguration _config;
-        readonly User _user;
-
+ 
         /// <summary>
         /// Ctor
         /// </summary>
@@ -35,20 +33,16 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public set(ILogger logger,
-                       BotConfiguration config,
-                        User user,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "set")
         {
-            _config = config;
-            _user = user;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "set")
             {
-                if (_config.GlobalSettings.Count > 0)
+                if (Context.Configuration.GlobalSettings.Count > 0)
                 {
                     if (TemplateNode.Attributes.Count == 1)
                     {
@@ -56,13 +50,13 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                         {
                             if (TemplateNode.InnerText.Length > 0)
                             {
-                                _user.Predicates.addSetting(TemplateNode.Attributes[0].Value, TemplateNode.InnerText);
-                                return _user.Predicates.grabSetting(TemplateNode.Attributes[0].Value);
+                                Context.User.Predicates.addSetting(TemplateNode.Attributes[0].Value, TemplateNode.InnerText);
+                                return Context.User.Predicates.grabSetting(TemplateNode.Attributes[0].Value);
                             }
                             else
                             {
                                 // remove the predicate
-                                _user.Predicates.removeSetting(TemplateNode.Attributes[0].Value);
+                                Context.User.Predicates.removeSetting(TemplateNode.Attributes[0].Value);
                                 return string.Empty;
                             }
                         }

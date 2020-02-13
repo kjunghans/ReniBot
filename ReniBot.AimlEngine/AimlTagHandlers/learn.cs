@@ -10,8 +10,6 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class learn : Utils.AIMLTagHandler
     {
-        readonly ILogger _logger;
-        readonly Bot _bot;
 
         /// <summary>
         /// Ctor
@@ -23,15 +21,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public learn(ILogger logger,
-                        Bot bot,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "learn")
         {
-            _logger = logger;
-            _bot = bot;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "learn")
             {
@@ -47,11 +42,11 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                         try
                         {
                             doc.Load(path);
-                            _bot.Learn(doc, path);
+                            Context.Bot.Learn(doc, path);
                         }
                         catch
                         {
-                            _logger.LogError("Attempted (but failed) to <learn> some new AIML from the following URI: " + path);
+                            Logger.LogError("Attempted (but failed) to <learn> some new AIML from the following URI: " + path);
                         }
                     }
                 }

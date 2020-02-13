@@ -18,11 +18,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class Sentence : Utils.AIMLTagHandler
     {
-        readonly BotConfiguration _config;
-        readonly ILogger _logger;
-        readonly Utils.SubQuery _query;
-        readonly Request _request;
-
+ 
         /// <summary>
         /// Ctor
         /// </summary>
@@ -33,20 +29,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public Sentence(ILogger logger,
-                         BotConfiguration config,
-                        Utils.SubQuery query,
-                        Request request,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "sentence")
         {
-            _config = config;
-            _query = query;
-            _request = request;
-            _logger = logger;
-
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "sentence")
             {
@@ -58,7 +46,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                     for (int i = 0; i < letters.Length; i++)
                     {
                         string letterAsString = Convert.ToString(letters[i]);
-                        if (_config.Splitters.Contains(letterAsString))
+                        if (Context.Configuration.Splitters.Contains(letterAsString))
                         {
                             doChange = true;
                         }
@@ -69,12 +57,12 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                         {
                             if (doChange)
                             {
-                                result.Append(letterAsString.ToUpper(_config.Locale));
+                                result.Append(letterAsString.ToUpper(Context.Configuration.Locale));
                                 doChange = false;
                             }
                             else
                             {
-                                result.Append(letterAsString.ToLower(_config.Locale));
+                                result.Append(letterAsString.ToLower(Context.Configuration.Locale));
                             }
                         }
                         else
@@ -88,11 +76,11 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                 {
                     // atomic version of the node
                     XmlNode starNode = Utils.AIMLTagHandler.GetNode("<star/>");
-                    Star recursiveStar = new Star(_logger,  _query, _request,  starNode);
-                    TemplateNode.InnerText = recursiveStar.Transform();
+                    Star recursiveStar = new Star(Logger, Context);
+                    TemplateNode.InnerText = recursiveStar.ProcessChange(starNode);
                     if (TemplateNode.InnerText.Length > 0)
                     {
-                        return ProcessChange();
+                        return ProcessChange(starNode);
                     }
                     else
                     {

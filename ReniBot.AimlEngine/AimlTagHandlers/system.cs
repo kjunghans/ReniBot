@@ -6,9 +6,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// <summary>
     /// NOT IMPLEMENTED FOR SECURITY REASONS
     /// </summary>
-    public class system : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class system : Utils.AIMLTagHandler
     {
-        readonly ILogger _logger;
         /// <summary>
         /// Ctor
         /// </summary>
@@ -19,15 +18,14 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public system(ILogger logger,
-                       XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "system")
         {
-            _logger = logger;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
-            _logger.LogWarning("The system tag is not implemented in this bot");
+            Logger.LogWarning("The system tag is not implemented in this bot");
             return string.Empty;
         }
     }

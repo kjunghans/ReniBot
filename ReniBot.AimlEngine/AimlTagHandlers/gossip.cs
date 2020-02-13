@@ -13,9 +13,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class gossip : Utils.AIMLTagHandler
     {
-        readonly ILogger _logger;
-        readonly User _user;
-
+ 
         /// <summary>
         /// Ctor
         /// </summary>
@@ -26,22 +24,19 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public gossip(ILogger logger,
-                        User user,
-                         XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "gossip")
         {
-            _logger = logger;
-            _user = user;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "gossip")
             {
                 // gossip is merely logged by the bot and written to log files
                 if (TemplateNode.InnerText.Length > 0)
                 {
-                    _logger.LogInformation("GOSSIP from user: " + _user.UserKey + ", '" + TemplateNode.InnerText + "'");
+                    Logger.LogInformation("GOSSIP from user: " + Context.User.UserKey + ", '" + TemplateNode.InnerText + "'");
                 }
             }
             return string.Empty;

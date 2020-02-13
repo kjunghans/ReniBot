@@ -15,9 +15,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// 
     /// The bot element does not have any content. 
     /// </summary>
-    public class bot : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class bot : Utils.AIMLTagHandler
     {
-        readonly SettingsDictionary _settings;
 
         /// <summary>
         /// Ctor
@@ -29,23 +28,21 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public bot(ILogger logger,
-                    SettingsDictionary globalSettings,
-                         XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "bot")
         {
-            _settings = globalSettings;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode templateNode)
         {
-            if (TemplateNode.Name.ToLower() == "bot")
+            if (templateNode.Name.ToLower() == "bot")
             {
-                if (TemplateNode.Attributes.Count == 1)
+                if (templateNode.Attributes.Count == 1)
                 {
-                    if (TemplateNode.Attributes[0].Name.ToLower() == "name")
+                    if (templateNode.Attributes[0].Name.ToLower() == "name")
                     {
-                        string key = TemplateNode.Attributes["name"].Value;
-                        return _settings.grabSetting(key);
+                        string key = templateNode.Attributes["name"].Value;
+                        return Context.Configuration.GlobalSettings.grabSetting(key);
                     }
                 }
             }

@@ -11,7 +11,6 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class version : Utils.AIMLTagHandler
     {
-        private readonly BotConfiguration _config;
         /// <summary>
         /// Ctor
         /// </summary>
@@ -22,18 +21,16 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public version(ILogger logger,
-                        BotConfiguration config,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "version")
         {
-            _config = config;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "version")
             {
-                return _config.GlobalSettings.grabSetting("version");
+                return Context.Configuration.GlobalSettings.grabSetting("version");
             }
             return string.Empty;
         }

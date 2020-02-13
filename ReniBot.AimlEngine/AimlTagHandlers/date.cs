@@ -12,9 +12,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// 
     /// The date element does not have any content. 
     /// </summary>
-    public class date : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class date : Utils.AIMLTagHandler
     {
-        private readonly CultureInfo _local;
 
         /// <summary>
         /// Ctor
@@ -26,18 +25,16 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public date(ILogger logger,
-                    CultureInfo local,
-                     XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "date")
         {
-            _local = local;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "date")
             {
-                return DateTime.Now.ToString(_local);
+                return DateTime.Now.ToString(Context.Configuration.Locale);
             }
             return string.Empty;
         }

@@ -19,34 +19,24 @@ namespace ReniBot.AimlEngine.Utils
         /// <param name="result">The result to be passed back to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public AIMLTagHandler(ILogger logger,
-                                    XmlNode templateNode) 
+                                BotContext context,
+                                string tagName) 
         {
             Logger = logger;
-            TemplateNode = templateNode;
-            TemplateNode.Attributes.RemoveNamedItem("xmlns");
-            InputString = templateNode.OuterXml;
+            //TemplateNode.Attributes.RemoveNamedItem("xmlns");
+            Context = context;
+            TagName = tagName;
         }
 
-        /// <summary>
-        /// Default ctor to use when late binding
-        /// </summary>
-        //public AIMLTagHandler()
-        //{
-        //}
-
-        public ILogger Logger;
+         public ILogger Logger { get; }
         /// <summary>
         /// A flag to denote if inner tags are to be processed recursively before processing this tag
         /// </summary>
-        public bool isRecursive = true;
+        public bool isRecursive { get; set; } = true;
 
-        /// <summary>
-        /// The template node to be processed by the class
-        /// </summary>
-        public XmlNode TemplateNode;
+        public BotContext Context { get; }
 
-        private string InputString;
-
+        public string TagName { get; }
 
         /// <summary>
         /// Helper method that turns the passed string into an XML node
@@ -60,38 +50,11 @@ namespace ReniBot.AimlEngine.Utils
             return temp.FirstChild;
         }
 
-        /// <summary>
-        /// Do a transformation on the supplied input string
-        /// </summary>
-        /// <param name="input">The string to be transformed</param>
-        /// <returns>The resulting output</returns>
-        public string Transform(string input)
-        {
-            InputString = input;
-            return Transform();
-        }
-
-        /// <summary>
-        /// Do a transformation on the string found in the InputString attribute
-        /// </summary>
-        /// <returns>The resulting transformed string</returns>
-        public string Transform()
-        {
-
-            if (InputString.Length > 0)
-            {
-                return ProcessChange();
-            }
-            else
-            {
-                return string.Empty;
-            }
-        }
-
+  
         /// <summary>
         /// The method that does the actual processing of the text.
         /// </summary>
         /// <returns>The resulting processed text</returns>
-        protected abstract string ProcessChange();
+        public abstract string ProcessChange(XmlNode templateNode);
     }
 }

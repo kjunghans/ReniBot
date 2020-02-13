@@ -19,9 +19,7 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// </summary>
     public class Thatstar : Utils.AIMLTagHandler
     {
-        private readonly Utils.SubQuery _query;
-        private readonly Request _request;
-        /// <summary>
+         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="bot">The bot involved in this request</param>
@@ -31,28 +29,24 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public Thatstar(ILogger logger,
-                        ReniBot.AimlEngine.Utils.SubQuery query,
-                        ReniBot.AimlEngine.Request request,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "thatstar")
         {
-            _query = query;
-            _request = request;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "thatstar")
             {
                 if (TemplateNode.Attributes.Count == 0)
                 {
-                    if (_query.ThatStar.Count > 0)
+                    if (Context.query.ThatStar.Count > 0)
                     {
-                        return _query.ThatStar[0];
+                        return Context.query.ThatStar[0];
                     }
                     else
                     {
-                        Logger.LogError("ERROR! An out of bounds index to thatstar was encountered when processing the input: " + _request.RawInput);
+                        Logger.LogError("ERROR! An out of bounds index to thatstar was encountered when processing the input: " + Context.Request.RawInput);
                     }
                 }
                 else if (TemplateNode.Attributes.Count == 1)
@@ -64,25 +58,25 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
                             try
                             {
                                 int result = Convert.ToInt32(TemplateNode.Attributes[0].Value.Trim());
-                                if (_query.ThatStar.Count > 0)
+                                if (Context.query.ThatStar.Count > 0)
                                 {
                                     if (result > 0)
                                     {
-                                        return _query.ThatStar[result - 1];
+                                        return Context.query.ThatStar[result - 1];
                                     }
                                     else
                                     {
-                                        Logger.LogError("An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
+                                        Logger.LogError("An input tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + Context.Request.RawInput);
                                     }
                                 }
                                 else
                                 {
-                                    Logger.LogError("ERROR! An out of bounds index to thatstar was encountered when processing the input: " + _request.RawInput);
+                                    Logger.LogError("ERROR! An out of bounds index to thatstar was encountered when processing the input: " + Context.Request.RawInput);
                                 }
                             }
                             catch
                             {
-                                Logger.LogError("ERROR! A thatstar tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + _request.RawInput);
+                                Logger.LogError("ERROR! A thatstar tag with a bady formed index (" + TemplateNode.Attributes[0].Value + ") was encountered processing the input: " + Context.Request.RawInput);
                             }
                         }
                     }

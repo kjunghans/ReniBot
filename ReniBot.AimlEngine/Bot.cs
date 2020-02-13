@@ -14,7 +14,7 @@ namespace ReniBot.AimlEngine
     /// Encapsulates a bot. If no settings.xml file is found or referenced the bot will try to
     /// default to safe settings.
     /// </summary>
-    public class Bot
+    public class Bot: IBot
     {
         public string AppKey { get; set; }
         private BotConfiguration _config;
@@ -32,6 +32,7 @@ namespace ReniBot.AimlEngine
         private readonly IUserRequestService _requestService;
         private readonly IApplicationService _applicationService;
         private readonly IBotConfigurationLoader _configurationLoader;
+        private BotContext _context;
 
         /// <summary>
         /// Ctor
@@ -57,7 +58,8 @@ namespace ReniBot.AimlEngine
             if (_appId < 1)
                 throw new Exception("Could not find application with that appKey");
             _config = _configurationLoader.loadSettings();
-            _tagFactory = new AimlTagHandlerFactory(_logger, _config);
+            _context = new BotContext() { Bot = this, Configuration = _config };
+            _tagFactory = new AimlTagHandlerFactory(_logger, _context);
             List<AimlDoc> docList = _applicationService.GetAimlDocs(_appId);
             foreach (var aimlDoc in docList)
                 Learn(aimlDoc.XmlDoc, aimlDoc.name);
@@ -189,7 +191,7 @@ namespace ReniBot.AimlEngine
             }
             else
             {
-                AIMLTagHandler tagHandler = _tagFactory.CreateTagHandler(tagName, this, user, query, request, result, node);
+                AIMLTagHandler tagHandler = _tagFactory.CreateTagHandler(tagName);
                 if (object.Equals(null, tagHandler))
                 {
                     return node.InnerText;
@@ -209,11 +211,11 @@ namespace ReniBot.AimlEngine
                                 }
                             }
                         }
-                        return tagHandler.Transform();
+                        return tagHandler.ProcessChange(node);
                     }
                     else
                     {
-                        string resultNodeInnerXML = tagHandler.Transform();
+                        string resultNodeInnerXML = tagHandler.ProcessChange(node);
                         XmlNode resultNode = AIMLTagHandler.GetNode("<node>" + resultNodeInnerXML + "</node>");
                         if (resultNode.HasChildNodes)
                         {

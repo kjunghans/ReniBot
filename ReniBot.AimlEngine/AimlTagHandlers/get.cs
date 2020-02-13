@@ -19,10 +19,8 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
     /// 
     /// The get element does not have any content.
     /// </summary>
-    public class Get : ReniBot.AimlEngine.Utils.AIMLTagHandler
+    public class Get : Utils.AIMLTagHandler
     {
-        readonly BotConfiguration _config;
-        readonly User _user;
 
         /// <summary>
         /// Ctor
@@ -34,26 +32,22 @@ namespace ReniBot.AimlEngine.AIMLTagHandlers
         /// <param name="result">The result to be passed to the user</param>
         /// <param name="templateNode">The node to be processed</param>
         public Get(ILogger logger,
-                    BotConfiguration config,
-                        User user,
-                        XmlNode templateNode)
-            : base(logger, templateNode)
+                    BotContext context)
+            : base(logger, context, "get")
         {
-            _config = config;
-            _user = user;
         }
 
-        protected override string ProcessChange()
+        public override string ProcessChange(XmlNode TemplateNode)
         {
             if (TemplateNode.Name.ToLower() == "get")
             {
-                if (_config.GlobalSettings.Count > 0)
+                if (Context.Configuration.GlobalSettings.Count > 0)
                 {
                     if (TemplateNode.Attributes.Count == 1)
                     {
                         if (TemplateNode.Attributes[0].Name.ToLower() == "name")
                         {
-                            return _user.Predicates.grabSetting(TemplateNode.Attributes[0].Value);
+                            return Context.User.Predicates.grabSetting(TemplateNode.Attributes[0].Value);
                         }
                     }
                 }
