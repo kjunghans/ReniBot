@@ -88,6 +88,8 @@ namespace ReniBot.AimlEngine
         public Result Chat(Request request)
         {
             Result result = new Result(request);
+            _context.Request = request;
+            _context.User = new User(_predicateService, _userResultService, _requestService) { UserId = request.UserId };
 
             if (_config.isAcceptingUserInput)
             {
@@ -119,8 +121,9 @@ namespace ReniBot.AimlEngine
                     {
                         try
                         {
+
                             XmlNode templateNode = AIMLTagHandler.GetNode(query.Template);
-                            string outputSentence = ProcessNode(templateNode, query, request, result, new User( _predicateService, _userResultService, _requestService) { UserId = request.UserId });
+                            string outputSentence = ProcessNode(templateNode, query, request, result, _context.User);
                             if (outputSentence.Length > 0)
                             {
                                 result.OutputSentences.Add(outputSentence);
